@@ -1,13 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using BLL.Interface.Entities;
+using BLL.Interface.Services;
 using BLL.Mappers;
 using DAL.Interface;
 using DAL.Interface.Repository;
 
 namespace BLL.Services
 {
-	public class UserService
+	public class UserService : IUserService
 	{
 		private readonly IUnitOfWork uow;
 		private readonly IUserRepository userRepository;
