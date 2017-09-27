@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("DependencyResolver")]
+[assembly: AssemblyTitle("DependencyResloverModule")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("EPAM Systems")]
-[assembly: AssemblyProduct("DependencyResolver")]
+[assembly: AssemblyProduct("DependencyResloverModule")]
 [assembly: AssemblyCopyright("Copyright © EPAM Systems 2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("cca45d1a-5a97-4b97-b8c8-c0b434278395")]
+[assembly: Guid("a3081dd9-0ed5-4a56-bd00-e40c7b06010c")]
 
 // Version information for an assembly consists of the following four values:
 //
