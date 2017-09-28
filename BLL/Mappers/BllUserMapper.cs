@@ -7,6 +7,9 @@ namespace BLL.Mappers
 	{
 		public static UserEntity ToBllUser(this DalUser user)
 		{
+			if (user == null)
+				return null;
+
 			var bllUser = new UserEntity
 			{
 				Id = user.Id,
@@ -20,6 +23,9 @@ namespace BLL.Mappers
 
 		public static DalUser ToDalUser(this UserEntity user)
 		{
+			if (user == null)
+				return null;
+
 			var dalUser = new DalUser
 			{
 				Id = user.Id,
