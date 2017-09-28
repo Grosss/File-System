@@ -29,7 +29,7 @@ namespace PL
 
 
 			bundles.Add(new StyleBundle("~/Content/css").Include(
-				"~/Content/bootstrap.css", 
+				"~/Content/bootstrap-sandstone.css", 
 				"~/Content/site.css"));
 			
 			// decide what to do with this jquery.ui
