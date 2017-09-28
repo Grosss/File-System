@@ -59,7 +59,7 @@ namespace DAL.Concrete
 		public DalUser GetUserByEmail(string email)
 		{
 			var user = context.Set<User>().FirstOrDefault(u =>
-				string.Equals(u.Email.ToLower(), email.ToLower(), StringComparison.Ordinal));
+				u.Email.ToLower() == email.ToLower());
 			return user != null
 				? user.ToDalUser()
 				: null;
@@ -68,7 +68,7 @@ namespace DAL.Concrete
 		public DalUser GetUserByLogin(string login)
         {
 			var user = context.Set<User>().FirstOrDefault(u =>
-				string.Equals(u.Login.ToLower(), login.ToLower(), StringComparison.Ordinal));
+				u.Login.ToLower() == login.ToLower());
 			return user != null
 				? user.ToDalUser()
 				: null;
