@@ -4,3 +4,40 @@
 }
 
 <h1>Welcome to the file system</h1>
+<h1>Welcome to the file system</h1>
+
+
+@{Uri uri = Request.Url;}
+
+@*Show the current directory name using page URL. *@
+<h2>@Server.UrlDecode(uri.Segments.Last())</h2>
+
+@*If we were in root folder then don't show the up one level image. *@
+@if (uri.AbsolutePath.ToLower() != "/home/" && uri.AbsolutePath.ToLower() != "/kkk")
+{
+    @*Making a URL to going up one level. *@
+    <a title="Parent"
+       href="@uri.AbsoluteUri.Remove(uri.AbsoluteUri.Length - uri.Segments.Last().Length)">
+        <img src="http://www.codeproject.com/Content/up.png" alt="Up" style="width: 20px; height: 20px; border: none" />
+    </a>
+}
+<ul>
+    @foreach (PL.Models.DirModel dir in Model.Directories)
+    {
+        <li>
+            <img src="~/Content/generic-folder.ico" alt="Folder Logo" align="top" style="width: 20px; height: 20px; border: none" />
+            <a href="@dir.Name/" title="@dir.Name">@dir.Name</a>
+            . . . . . . @dir.LastAccessTime
+        </li>
+    }
+    @foreach (PL.Models.FileModel file in Model.Files)
+    {
+        <li>
+            <a href="@(uri.AbsolutePath + file.Name)"
+               title="@file.Name" target="_blank">
+                @file.Name
+            </a>. . . . . . @file.FileSizeText
+            . . . . . . @file.LastAccessTime
+        </li>
+    }
+</ul>

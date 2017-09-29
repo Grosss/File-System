@@ -13,6 +13,17 @@ namespace PL
 		{
 			routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
+			routes.MapRoute(			
+				name: "Home",
+				url: "Home/{*path}",
+				defaults: new
+				{
+					controller = "Home",
+					action = "Index",
+					path = UrlParameter.Optional
+				}
+			);
+
 			routes.MapRoute(
 				name: "Default",
 				url: "{controller}/{action}/{id}",
