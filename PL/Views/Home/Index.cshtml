@@ -16,9 +16,8 @@
 @if (uri.AbsolutePath.ToLower() != "/home/" && uri.AbsolutePath.ToLower() != "/kkk")
 {
     @*Making a URL to going up one level. *@
-    <a title="Parent"
+    <a title="Parent" class="glyphicon glyphicon-arrow-left"
        href="@uri.AbsoluteUri.Remove(uri.AbsoluteUri.Length - uri.Segments.Last().Length)">
-        <img src="http://www.codeproject.com/Content/up.png" alt="Up" style="width: 20px; height: 20px; border: none" />
     </a>
 }
 <ul>
