@@ -12,73 +12,76 @@ namespace PL.Controllers
     public class HomeController : Controller
     {
 		//[Authorize]
-        public ActionResult Index(string path)
+        public ActionResult Index(string path = "")
         {
 			var realPath = Server.MapPath("~/Content/" + path);
 
 			if (System.IO.File.Exists(realPath))
 			{
-				//http://stackoverflow.com/questions/1176022/unknown-file-type-mime
-				return base.File(realPath, "application/octet-stream");
+				return File(realPath, "application/octet-stream");
 			}
-			else
-			{
-				if (System.IO.Directory.Exists(realPath))
-				{
+	        
+	        if (!Request.RawUrl.Contains(ControllerContext.RequestContext.RouteData.Values["controller"].ToString()))
+	        {
+				Response.Redirect("/Home/");
+	        }
 
-					Uri url = Request.Url;
-					//Every path needs to end with slash
-					if (url.ToString().Last() != '/')
-					{
-						Response.Redirect("/Home/" + path + "/");
-					}
+	        if (Directory.Exists(realPath))
+	        {
 
-					var fileListModel = new List<FileModel>();
+		        Uri url = Request.Url;
+		        //Every path needs to end with slash
+		        if (url.ToString().Last() != '/')
+		        {
+			        Response.Redirect("/Home/" + path + "/");
+		        }
 
-					var dirListModel = new List<DirModel>();
+		        var fileListModel = new List<FileModel>();
 
-					var dirList = Directory.EnumerateDirectories(realPath);
-					foreach (string dir in dirList)
-					{
-						var dirInfo = new DirectoryInfo(dir);
+		        var dirListModel = new List<DirModel>();
 
-						var dirModel = new DirModel
-						{
-							Name = dirInfo.Name,
-							LastAccessTime = dirInfo.LastAccessTime
-						};
+		        var dirList = Directory.EnumerateDirectories(realPath);
 
-						dirListModel.Add(dirModel);
-					}
+		        foreach (string dir in dirList)
+		        {
+			        var dirInfo = new DirectoryInfo(dir);
 
-					var fileList = Directory.EnumerateFiles(realPath);
-					foreach (var file in fileList)
-					{
-						var f = new FileInfo(file);
+			        var dirModel = new DirModel
+			        {
+				        Name = dirInfo.Name,
+				        LastAccessTime = dirInfo.LastAccessTime
+			        };
 
-						var fileModel = new FileModel();
+			        dirListModel.Add(dirModel);
+		        }
 
-						if (f.Extension.ToLower() != "php" && f.Extension.ToLower() != "aspx"
-						    && f.Extension.ToLower() != "asp")
-						{
-							fileModel.Name = f.Name;
-							fileModel.LastAccessTime = f.LastAccessTime;
-							fileModel.FileSizeText = (f.Length < 1024) ? f.Length.ToString() + " B" : f.Length / 1024 + " KB";
+		        var fileList = Directory.EnumerateFiles(realPath);
+		        foreach (var file in fileList)
+		        {
+			        var f = new FileInfo(file);
 
-							fileListModel.Add(fileModel);
-						}
-					}
+			        var fileModel = new FileModel();
 
-					var explorerModel = new ExplorerModel
-					{
-						Directories = dirListModel,
-						Files = fileListModel
-					};
+			        if (f.Extension.ToLower() != "php" && f.Extension.ToLower() != "aspx"
+			            && f.Extension.ToLower() != "asp")
+			        {
+				        fileModel.Name = f.Name;
+				        fileModel.LastAccessTime = f.LastAccessTime;
+				        fileModel.FileSizeText = (f.Length < 1024) ? f.Length.ToString() + " B" : f.Length / 1024 + " KB";
 
-					return View(explorerModel);
-				}
-				return Content(path + " is not a valid file or directory.");
-			}
+				        fileListModel.Add(fileModel);
+			        }
+		        }
+
+		        var explorerModel = new ExplorerModel
+		        {
+			        Directories = dirListModel,
+			        Files = fileListModel
+		        };
+
+		        return View(explorerModel);
+	        }
+	        return Content(path + " is not a valid file or directory.");
         }
 
     }

@@ -1,42 +1,58 @@
 ﻿@{
     ViewBag.Title = "Index";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Uri uri = Request.Url;
 }
 
 <h1>Welcome to the file system</h1>
 <h1>Welcome to the file system</h1>
-
-
-@{Uri uri = Request.Url;}
 
 @*Show the current directory name using page URL. *@
-<h2>@Server.UrlDecode(uri.Segments.Last())</h2>
+<h2>@uri.Segments.Last()</h2>
+<h2>@uri.AbsolutePath</h2>
+<h2>@uri.AbsoluteUri</h2>
 
-@*If we were in root folder then don't show the up one level image. *@
-@if (uri.AbsolutePath.ToLower() != "/home/" && uri.AbsolutePath.ToLower() != "/kkk")
+@*Being in the root folder the image shouldn't be shown. *@
+@if (uri.AbsolutePath.ToLower() != "/home/" && uri.AbsolutePath.ToLower() != "/")
 {
-    @*Making a URL to going up one level. *@
-    <a title="Parent" class="glyphicon glyphicon-arrow-left"
+    <a title="Back to @uri.AbsolutePath.Remove(uri.AbsolutePath.Length - uri.Segments.Last().Length)" class="glyphicon glyphicon-arrow-left"
        href="@uri.AbsoluteUri.Remove(uri.AbsoluteUri.Length - uri.Segments.Last().Length)">
     </a>
+    @uri.AbsolutePath.Remove(uri.AbsolutePath.Length - uri.Segments.Last().Length)
 }
-<ul>
-    @foreach (PL.Models.DirModel dir in Model.Directories)
-    {
-        <li>
-            <img src="~/Content/generic-folder.ico" alt="Folder Logo" align="top" style="width: 20px; height: 20px; border: none" />
-            <a href="@dir.Name/" title="@dir.Name">@dir.Name</a>
-            . . . . . . @dir.LastAccessTime
-        </li>
-    }
-    @foreach (PL.Models.FileModel file in Model.Files)
-    {
-        <li>
-            <a href="@(uri.AbsolutePath + file.Name)"
-               title="@file.Name" target="_blank">
-                @file.Name
-            </a>. . . . . . @file.FileSizeText
-            . . . . . . @file.LastAccessTime
-        </li>
-    }
-</ul>
+
+<table class="table table-hover" style="border: none">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Date modified</th>
+            <th>Type</th>
+            <th>Size</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (PL.Models.DirModel dir in Model.Directories)
+        {
+            <tr ondblclick="location.href = '@Url.Action("Index", "Home",new {path = uri.AbsolutePath.Remove(0, uri.Segments[1].Length) + @dir.Name + "/"})'" >
+                <td>
+                    <img src="~/Content/generic-folder.ico" alt="Folder icon" align="top" style="width: 20px; height: 20px; border: none" />
+                    @dir.Name
+                </td>
+                <td>@dir.LastAccessTime</td>
+                <td>File folder</td>
+                <td></td>
+            </tr>
+        }
+        @foreach (PL.Models.FileModel file in Model.Files)
+        {
+            <tr>
+                <td>
+                    @Html.ActionLink(file.Name, "Index", "Home",
+                        new { path = uri.AbsolutePath.Remove(0, uri.Segments[1].Length) + file.Name + "/" }, new { @title = file.Name, @class = "" })
+                </td>
+                <td>@file.LastAccessTime</td>
+                <td>Extension file</td>
+                <td>@file.FileSizeText</td>
+            </tr>
+        }
+    </tbody>
+</table>

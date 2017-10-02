@@ -11,7 +11,8 @@
                 <li role="separator" class="divider"></li>
                 @if (User.IsInRole("admin"))
                 {
-                    <li><<span class="glyphicon glyphicon-sort-by-alphabet"></span> ADMIN </li>
+                    <li> Only for ADMIN</li>
+                    <li><span class="glyphicon glyphicon-sort-by-alphabet"></span> Users </li>
                     <li role="separator" class="divider"></li>
                 }
                 <li>@Html.ActionLink("LogOut", "LogOff", "Account", null, null)</li>
