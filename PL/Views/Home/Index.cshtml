@@ -7,18 +7,33 @@
 <h1>Welcome to the file system</h1>
 
 @*Show the current directory name using page URL. *@
-<h2>@uri.Segments.Last()</h2>
 <h2>@uri.AbsolutePath</h2>
 <h2>@uri.AbsoluteUri</h2>
 
-@*Being in the root folder the image shouldn't be shown. *@
-@if (uri.AbsolutePath.ToLower() != "/home/" && uri.AbsolutePath.ToLower() != "/")
-{
-    <a title="Back to @uri.AbsolutePath.Remove(uri.AbsolutePath.Length - uri.Segments.Last().Length)" class="glyphicon glyphicon-arrow-left"
-       href="@uri.AbsoluteUri.Remove(uri.AbsoluteUri.Length - uri.Segments.Last().Length)">
-    </a>
-    @uri.AbsolutePath.Remove(uri.AbsolutePath.Length - uri.Segments.Last().Length)
-}
+<div class="row">
+    <div class="col-md-2">
+        @if (uri.AbsolutePath.ToLower() != "/home/")
+        {
+            <a title="Back to @uri.Segments[2]" class="glyphicon glyphicon-arrow-left"
+               href="@uri.AbsoluteUri.Remove(uri.AbsoluteUri.Length - uri.Segments.Last().Length)">
+            </a>
+            @uri.AbsolutePath.Remove(uri.AbsolutePath.Length - uri.Segments.Last().Length)
+        }
+    </div>
+    @if (User.IsInRole("admin")) 
+    { 
+        <div class="col-md-1">
+            <a title="New folder" class="glyphicon glyphicon-plus col-md-1"
+               href="@uri.AbsoluteUri.Remove(uri.AbsoluteUri.Length - uri.Segments.Last().Length)">
+            </a>
+        </div>
+        <div class="col-md-1">
+            <a title="Delete" class="glyphicon glyphicon-remove col-md-1"
+               href="@uri.AbsoluteUri.Remove(uri.AbsoluteUri.Length - uri.Segments.Last().Length)">
+            </a>
+        </div>
+    }
+</div>
 
 <table class="table table-hover" style="border: none">
     <thead>
@@ -32,7 +47,7 @@
     <tbody>
         @foreach (PL.Models.DirModel dir in Model.Directories)
         {
-            <tr ondblclick="location.href = '@Url.Action("Index", "Home",new {path = uri.AbsolutePath.Remove(0, uri.Segments[1].Length) + @dir.Name + "/"})'" >
+            <tr ondblclick="location.href = '@Url.Action("Index", "Home", new {path = uri.AbsolutePath.Remove(0, uri.Segments[1].Length) + @dir.Name + "/"})'">
                 <td>
                     <img src="~/Content/generic-folder.ico" alt="Folder icon" align="top" style="width: 20px; height: 20px; border: none" />
                     @dir.Name
@@ -47,10 +62,10 @@
             <tr>
                 <td>
                     @Html.ActionLink(file.Name, "Index", "Home",
-                        new { path = uri.AbsolutePath.Remove(0, uri.Segments[1].Length) + file.Name + "/" }, new { @title = file.Name, @class = "" })
+                        new { path = uri.AbsolutePath.Remove(0, uri.Segments[1].Length) + file.Name }, new { @title = file.Name, @class = "" })
                 </td>
                 <td>@file.LastAccessTime</td>
-                <td>Extension file</td>
+                <td>@file.Extension.ToUpper().Substring(1) File</td>
                 <td>@file.FileSizeText</td>
             </tr>
         }

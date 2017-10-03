@@ -5,13 +5,25 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.WebPages;
+using BLL.Interface.Services;
+using PL.Infrastrucuture.Mappers;
 using PL.Models;
 
 namespace PL.Controllers
 {
     public class HomeController : Controller
     {
-		//[Authorize]
+		private readonly IFileService fileService;
+		private readonly IDirectoryService directoryService;
+
+		public HomeController(IFileService fileService, IDirectoryService directoryService)
+		{
+			this.fileService = fileService;
+			this.directoryService = directoryService;
+		}
+		
+		[Authorize]
+		[HttpGet]
         public ActionResult Index(string path = "")
         {
 			var realPath = Server.MapPath("~/Content/" + path);
@@ -28,54 +40,17 @@ namespace PL.Controllers
 
 	        if (Directory.Exists(realPath))
 	        {
-
-		        Uri url = Request.Url;
-		        //Every path needs to end with slash
-		        if (url.ToString().Last() != '/')
+				if (Request.RawUrl.Last() != '/')
 		        {
 			        Response.Redirect("/Home/" + path + "/");
 		        }
 
-		        var fileListModel = new List<FileModel>();
-
-		        var dirListModel = new List<DirModel>();
-
-		        var dirList = Directory.EnumerateDirectories(realPath);
-
-		        foreach (string dir in dirList)
-		        {
-			        var dirInfo = new DirectoryInfo(dir);
-
-			        var dirModel = new DirModel
-			        {
-				        Name = dirInfo.Name,
-				        LastAccessTime = dirInfo.LastAccessTime
-			        };
-
-			        dirListModel.Add(dirModel);
-		        }
-
-		        var fileList = Directory.EnumerateFiles(realPath);
-		        foreach (var file in fileList)
-		        {
-			        var f = new FileInfo(file);
-
-			        var fileModel = new FileModel();
-
-			        if (f.Extension.ToLower() != "php" && f.Extension.ToLower() != "aspx"
-			            && f.Extension.ToLower() != "asp")
-			        {
-				        fileModel.Name = f.Name;
-				        fileModel.LastAccessTime = f.LastAccessTime;
-				        fileModel.FileSizeText = (f.Length < 1024) ? f.Length.ToString() + " B" : f.Length / 1024 + " KB";
-
-				        fileListModel.Add(fileModel);
-			        }
-		        }
-
+				var dirListModel = directoryService.GetAllDirectories(realPath).Select(d => d.ToMvcDirectory());
+		        var fileListModel = fileService.GetAllFiles(realPath).Select(f => f.ToMvcFile());
+				
 		        var explorerModel = new ExplorerModel
 		        {
-			        Directories = dirListModel,
+					Directories = dirListModel,
 			        Files = fileListModel
 		        };
 

@@ -9,6 +9,7 @@ namespace PL.Models
 	{
 		public string Name { get; set; }
 		public string FileSizeText { get; set; }
+		public string Extension { get; set; }
 		public DateTime LastAccessTime { get; set; }
 	}
 }
