@@ -27,12 +27,7 @@ namespace PL.Controllers
         public ActionResult Index(string path = "")
         {
 			var realPath = Server.MapPath("~/Content/" + path);
-
-			if (System.IO.File.Exists(realPath))
-			{
-				return File(realPath, "application/octet-stream");
-			}
-	        
+			
 	        if (!Request.RawUrl.Contains(ControllerContext.RequestContext.RouteData.Values["controller"].ToString()))
 	        {
 				Response.Redirect("/Home/");

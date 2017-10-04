@@ -2,7 +2,7 @@
     ViewBag.Title = "Index";
     Uri uri = Request.Url;
 }
-
+@model PL.Models.ExplorerModel
 <h1>Welcome to the file system</h1>
 <h1>Welcome to the file system</h1>
 
@@ -45,9 +45,9 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (PL.Models.DirModel dir in Model.Directories)
+        @foreach (var dir in Model.Directories)
         {
-            <tr ondblclick="location.href = '@Url.Action("Index", "Home", new {path = uri.AbsolutePath.Remove(0, uri.Segments[1].Length) + @dir.Name + "/"})'">
+            <tr ondblclick="location.href = '@Url.Action("Index", "Home", new { path = uri.AbsolutePath.Remove(0, uri.Segments[1].Length) + @dir.Name + "/" })'">
                 <td>
                     <img src="~/Content/generic-folder.ico" alt="Folder icon" align="top" style="width: 20px; height: 20px; border: none" />
                     @dir.Name
@@ -57,12 +57,11 @@
                 <td></td>
             </tr>
         }
-        @foreach (PL.Models.FileModel file in Model.Files)
+        @foreach (var file in Model.Files)
         {
             <tr>
                 <td>
-                    @Html.ActionLink(file.Name, "Index", "Home",
-                        new { path = uri.AbsolutePath.Remove(0, uri.Segments[1].Length) + file.Name }, new { @title = file.Name, @class = "" })
+                    @file.Name
                 </td>
                 <td>@file.LastAccessTime</td>
                 <td>@file.Extension.ToUpper().Substring(1) File</td>

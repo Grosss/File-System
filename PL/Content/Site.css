@@ -5,6 +5,10 @@
     background-color: #fff;
 }
 
+table tr td {
+    cursor: default;
+}
+
 header, footer, nav, section {
     display: block;
 }
