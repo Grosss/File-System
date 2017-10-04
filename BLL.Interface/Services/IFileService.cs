@@ -8,7 +8,6 @@ namespace BLL.Interface.Services
 		IEnumerable<FileEntity> GetAllFiles(string path);
 		FileEntity GetFile(int id);
 		void CreateFile(FileEntity entity);
-		void DeleteFile(FileEntity entity);
-		void UpdateFile(FileEntity entity);
+		void DeleteFile(string path);
 	}
 }

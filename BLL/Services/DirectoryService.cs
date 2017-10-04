@@ -29,14 +29,12 @@ namespace BLL.Services
 			throw new System.NotImplementedException();
 		}
 
-		public void DeleteDirectory(DirectoryEntity entity)
+		public void DeleteDirectory(string path)
 		{
-			throw new System.NotImplementedException();
-		}
-
-		public void UpdateDirectory(DirectoryEntity entity)
-		{
-			throw new System.NotImplementedException();
+			if (Directory.Exists(path))
+			{
+				Directory.Delete(path, true);
+			}
 		}
 	}
 }

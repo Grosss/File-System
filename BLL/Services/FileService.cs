@@ -32,14 +32,12 @@ namespace BLL.Services
 			throw new System.NotImplementedException();
 		}
 
-		public void DeleteFile(FileEntity entity)
+		public void DeleteFile(string path)
 		{
-			throw new System.NotImplementedException();
-		}
-
-		public void UpdateFile(FileEntity entity)
-		{
-			throw new System.NotImplementedException();
+			if (File.Exists(path))
+			{
+				File.Delete(path);
+			}
 		}
 	}
 }

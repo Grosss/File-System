@@ -8,7 +8,6 @@ namespace BLL.Interface.Services
 		IEnumerable<DirectoryEntity> GetAllDirectories(string path);
 		DirectoryEntity GetDirectory(int id);
 		void CreateDirectory(DirectoryEntity entity);
-		void DeleteDirectory(DirectoryEntity entity);
-		void UpdateDirectory(DirectoryEntity entity);
+		void DeleteDirectory(string path);
 	}
 }
