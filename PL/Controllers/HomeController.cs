@@ -56,37 +56,37 @@ namespace PL.Controllers
 				+ " " + RouteData.Values["path"]);
         }
 
-		[Authorize]
-		//[ChildActionOnly]
-		public ActionResult GetDirectories(string path = "")
-		{
-			var realPath = Server.MapPath("~/Content/" + path);
+		//[Authorize]
+		////[ChildActionOnly]
+		//public ActionResult GetDirectories(string path = "")
+		//{
+		//	var realPath = Server.MapPath("~/Content/" + path);
 
-			if (!Request.RawUrl.Contains(RouteData.Values["controller"].ToString()))
-			{
-				Response.Redirect("/Home/Index/");
-			}
+		//	if (!Request.RawUrl.Contains(RouteData.Values["controller"].ToString()))
+		//	{
+		//		Response.Redirect("/Home/Index/");
+		//	}
 
-			if (Directory.Exists(realPath))
-			{
-				if (Request.RawUrl.Last() != '/')
-				{
-					Response.Redirect("/Home/Index/" + path + "/");
-				}
+		//	if (Directory.Exists(realPath))
+		//	{
+		//		if (Request.RawUrl.Last() != '/')
+		//		{
+		//			Response.Redirect("/Home/Index/" + path + "/");
+		//		}
 
-				var dirListModel = directoryService.GetAllDirectories(realPath).Select(d => d.ToMvcDirectory());
-				var fileListModel = fileService.GetAllFiles(realPath).Select(f => f.ToMvcFile());
+		//		var dirListModel = directoryService.GetAllDirectories(realPath).Select(d => d.ToMvcDirectory());
+		//		var fileListModel = fileService.GetAllFiles(realPath).Select(f => f.ToMvcFile());
 
-				var explorerModel = new ExplorerModel
-				{
-					Directories = dirListModel,
-					Files = fileListModel
-				};
+		//		var explorerModel = new ExplorerModel
+		//		{
+		//			Directories = dirListModel,
+		//			Files = fileListModel
+		//		};
 
-				return PartialView(explorerModel);
-			}
-			return Content(path + "ZZZ is not a valid file or directory. ZZZ " + RouteData.Values["controller"] + " " + RouteData.Values["action"]
-				+ " " + RouteData.Values["path"]);
-		}
+		//		return PartialView(explorerModel);
+		//	}
+		//	return Content(path + "ZZZ is not a valid file or directory. ZZZ " + RouteData.Values["controller"] + " " + RouteData.Values["action"]
+		//		+ " " + RouteData.Values["path"]);
+		//}
     }
 }

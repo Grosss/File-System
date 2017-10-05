@@ -37,7 +37,7 @@
             </a>
         </div>
         <div class="col-md-1">
-            <a id="deleteFile" title="Delete" class="glyphicon glyphicon-remove col-md-1"
+            <a id="deleteFile" title="Delete" class="btn btn-primary glyphicon glyphicon-remove col-md-1"
                href="@uri.AbsoluteUri.Remove(uri.AbsoluteUri.Length - uri.Segments.Last().Length)">
             </a>
         </div>
@@ -46,7 +46,7 @@
 
 <table class="table table-hover" style="border: none">
     <thead>
-    <tr class="chosen">
+    <tr>
         <th>Name</th>
         <th>Date modified</th>
         <th>Type</th>
@@ -81,9 +81,7 @@
     </tbody>
 </table>
 <div id="explorer">
-
-</div>
-<div>@Ajax.ActionLink("Dirs", "GetDirectories", "Home",
-    new { path = HttpContext.Current.Request.RequestContext.RouteData.Values["path"] },
-    new AjaxOptions { UpdateTargetId = "explorer", Url = Url.Action("Index", "Home", new { path = HttpContext.Current.Request.RequestContext.RouteData.Values["path"] }) })
+    @*@Ajax.ActionLink("Dirs", "GetDirectories", "Home",
+             new {path = HttpContext.Current.Request.RequestContext.RouteData.Values["path"]},
+             new AjaxOptions {UpdateTargetId = "explorer", Url = Url.Action("Index", "Home", new {path = HttpContext.Current.Request.RequestContext.RouteData.Values["path"]})})*@
 </div>

@@ -13,6 +13,6 @@
     });
 
     $("#deleteFile").click(function () {
-        alert("ASASA");
+        alert("something");
     });
 });
