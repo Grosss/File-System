@@ -63,3 +63,11 @@ textarea {
 .validation-summary-valid {
     display: none;
 }
+
+.chosen tr{
+    background: cornflowerblue;       
+}
+
+.non-chosen {
+    background: white;
+}

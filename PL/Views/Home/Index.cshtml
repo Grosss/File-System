@@ -3,20 +3,29 @@
     Uri uri = Request.Url;
 }
 @model PL.Models.ExplorerModel
+@section Scripts
+{
+    <script src="@Url.Content("~/Scripts/custom.js")"></script>  
+}
+
 <h1>Welcome to the file system</h1>
 <h1>Welcome to the file system</h1>
 
 @*Show the current directory name using page URL. *@
 <h2>@uri.AbsolutePath</h2>
 <h2>@uri.AbsoluteUri</h2>
+<h2>@HttpContext.Current.Request.RequestContext.RouteData.Values["path"]</h2>
+
+
 
 <div class="row">
     <div class="col-md-2">
         @if (uri.AbsolutePath.ToLower() != "/home/")
         {
-            <a title="Back to @uri.Segments[2]" class="glyphicon glyphicon-arrow-left"
+            <a title="Back" class="glyphicon glyphicon-arrow-left"
                href="@uri.AbsoluteUri.Remove(uri.AbsoluteUri.Length - uri.Segments.Last().Length)">
             </a>
+            @*@HttpContext.Current.Request.RequestContext.RouteData.Values["path"]*@
             @uri.AbsolutePath.Remove(uri.AbsolutePath.Length - uri.Segments.Last().Length)
         }
     </div>
@@ -28,7 +37,7 @@
             </a>
         </div>
         <div class="col-md-1">
-            <a title="Delete" class="glyphicon glyphicon-remove col-md-1"
+            <a id="deleteFile" title="Delete" class="glyphicon glyphicon-remove col-md-1"
                href="@uri.AbsoluteUri.Remove(uri.AbsoluteUri.Length - uri.Segments.Last().Length)">
             </a>
         </div>
@@ -37,17 +46,17 @@
 
 <table class="table table-hover" style="border: none">
     <thead>
-        <tr>
-            <th>Name</th>
-            <th>Date modified</th>
-            <th>Type</th>
-            <th>Size</th>
-        </tr>
+    <tr class="chosen">
+        <th>Name</th>
+        <th>Date modified</th>
+        <th>Type</th>
+        <th>Size</th>
+    </tr>
     </thead>
-    <tbody>
+    <tbody id="explorerTable">
         @foreach (var dir in Model.Directories)
         {
-            <tr ondblclick="location.href = '@Url.Action("Index", "Home", new { path = uri.AbsolutePath.Remove(0, uri.Segments[1].Length) + @dir.Name + "/" })'">
+            <tr ondblclick="location.href = '@Url.Action("Index", "Home", new { path = HttpContext.Current.Request.RequestContext.RouteData.Values["path"] + dir.Name + "/" })'">
                 <td>
                     <img src="~/Content/generic-folder.ico" alt="Folder icon" align="top" style="width: 20px; height: 20px; border: none" />
                     @dir.Name
@@ -68,5 +77,13 @@
                 <td>@file.FileSizeText</td>
             </tr>
         }
+        @*@Html.Action("GetDirectories", "Home", new { path = HttpContext.Current.Request.RequestContext.RouteData.Values["path"] })*@
     </tbody>
 </table>
+<div id="explorer">
+
+</div>
+<div>@Ajax.ActionLink("Dirs", "GetDirectories", "Home",
+    new { path = HttpContext.Current.Request.RequestContext.RouteData.Values["path"] },
+    new AjaxOptions { UpdateTargetId = "explorer", Url = Url.Action("Index", "Home", new { path = HttpContext.Current.Request.RequestContext.RouteData.Values["path"] }) })
+</div>

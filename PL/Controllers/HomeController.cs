@@ -25,19 +25,20 @@ namespace PL.Controllers
 		[Authorize]
 		[HttpGet]
         public ActionResult Index(string path = "")
-        {
+		{
+			var v = RouteData.Values["controller"];
 			var realPath = Server.MapPath("~/Content/" + path);
 			
-	        if (!Request.RawUrl.Contains(ControllerContext.RequestContext.RouteData.Values["controller"].ToString()))
+	        if (!Request.RawUrl.Contains(RouteData.Values["controller"].ToString()))
 	        {
-				Response.Redirect("/Home/");
+				Response.Redirect("/Home/Index/");
 	        }
 
 	        if (Directory.Exists(realPath))
 	        {
 				if (Request.RawUrl.Last() != '/')
 		        {
-			        Response.Redirect("/Home/" + path + "/");
+			        Response.Redirect("/Home/Index/" + path + "/");
 		        }
 
 				var dirListModel = directoryService.GetAllDirectories(realPath).Select(d => d.ToMvcDirectory());
@@ -51,8 +52,41 @@ namespace PL.Controllers
 
 		        return View(explorerModel);
 	        }
-	        return Content(path + " is not a valid file or directory.");
+			return Content(path + " is not a valid file or directory. " + RouteData.Values["controller"] + " " + RouteData.Values["action"]
+				+ " " + RouteData.Values["path"]);
         }
 
+		[Authorize]
+		//[ChildActionOnly]
+		public ActionResult GetDirectories(string path = "")
+		{
+			var realPath = Server.MapPath("~/Content/" + path);
+
+			if (!Request.RawUrl.Contains(RouteData.Values["controller"].ToString()))
+			{
+				Response.Redirect("/Home/Index/");
+			}
+
+			if (Directory.Exists(realPath))
+			{
+				if (Request.RawUrl.Last() != '/')
+				{
+					Response.Redirect("/Home/Index/" + path + "/");
+				}
+
+				var dirListModel = directoryService.GetAllDirectories(realPath).Select(d => d.ToMvcDirectory());
+				var fileListModel = fileService.GetAllFiles(realPath).Select(f => f.ToMvcFile());
+
+				var explorerModel = new ExplorerModel
+				{
+					Directories = dirListModel,
+					Files = fileListModel
+				};
+
+				return PartialView(explorerModel);
+			}
+			return Content(path + "ZZZ is not a valid file or directory. ZZZ " + RouteData.Values["controller"] + " " + RouteData.Values["action"]
+				+ " " + RouteData.Values["path"]);
+		}
     }
 }
