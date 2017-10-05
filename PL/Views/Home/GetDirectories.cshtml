@@ -1,0 +1,25 @@
+﻿@model PL.Models.ExplorerModel
+
+@foreach (var dir in Model.Directories)
+{
+    <tr ondblclick="location.href = '@Url.Action("Index", "Home", new { path = HttpContext.Current.Request.RequestContext.RouteData.Values["path"] + dir.Name + "/" })'">
+        <td>
+            <img src="~/Content/generic-folder.ico" alt="Folder icon" align="top" style="width: 20px; height: 20px; border: none" />
+            @dir.Name
+        </td>
+        <td>@dir.LastAccessTime</td>
+        <td>File folder</td>
+        <td></td>
+    </tr>
+}
+@foreach (var file in Model.Files)
+{
+    <tr>
+        <td>
+            @file.Name
+        </td>
+        <td>@file.LastAccessTime</td>
+        <td>@file.Extension.ToUpper().Substring(1) File</td>
+        <td>@file.FileSizeText</td>
+    </tr>
+}
