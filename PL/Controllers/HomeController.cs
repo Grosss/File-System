@@ -28,7 +28,7 @@ namespace PL.Controllers
 		{
 			var realPath = Server.MapPath("~/Content/" + path);
 			
-	        if (!Request.RawUrl.Contains(RouteData.Values["controller"].ToString()))
+	        if (!Request.RawUrl.Contains(RouteData.Values["action"].ToString()))
 	        {
 				Response.Redirect("/Home/Index/");
 	        }
