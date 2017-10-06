@@ -26,7 +26,6 @@ namespace PL.Controllers
 		[HttpGet]
         public ActionResult Index(string path = "")
 		{
-			var v = RouteData.Values["controller"];
 			var realPath = Server.MapPath("~/Content/" + path);
 			
 	        if (!Request.RawUrl.Contains(RouteData.Values["controller"].ToString()))
@@ -83,7 +82,7 @@ namespace PL.Controllers
 		//			Files = fileListModel
 		//		};
 
-		//		return PartialView(explorerModel);
+		//		return PartialView("_GetDirectories",explorerModel);
 		//	}
 		//	return Content(path + "ZZZ is not a valid file or directory. ZZZ " + RouteData.Values["controller"] + " " + RouteData.Values["action"]
 		//		+ " " + RouteData.Values["path"]);
