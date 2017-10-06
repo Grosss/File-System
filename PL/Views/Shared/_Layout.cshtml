@@ -9,7 +9,8 @@
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @Scripts.Render("~/bundles/jqueryval")
-    @Scripts.Render("~/bundles/jqueryui")      
+    @Scripts.Render("~/bundles/jqueryui")
+    @Styles.Render("~/Content/Site.css")      
     @RenderSection("scripts", required: false)
 </head>
 <body>
@@ -28,7 +29,7 @@
             </div>
         </div>
     </div>
-    <div class="container body-content" style="height: 100%; overflow: auto">
+    <div class="container body-content" style="padding-top: 70px; height: 100%; overflow: auto">
         @RenderBody()
         <hr />
         <footer class="footer navbar-fixed-bottom">
