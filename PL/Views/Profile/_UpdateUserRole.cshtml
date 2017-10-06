@@ -1,0 +1,33 @@
+﻿@model PL.Models.UserViewModel
+
+<td>@Model.Login</td>
+<td>@Model.Email</td>
+<td>
+    @foreach (var role in Model.Roles)
+    {
+        <div>@role</div>
+    }
+</td>
+<td>
+    <div>
+        @if (User.Identity.Name == Model.Login)
+        {
+            @:<p>You already have an admin role</p>
+        }
+        else
+        {
+            if (!Model.Roles.Contains("admin"))
+            {
+                @Ajax.ActionLink("Give an admin role", "UpdateUserRole", new { userId = Model.Id, roleName = "admin" },
+                    new AjaxOptions { UpdateTargetId = "row" + Model.Id, HttpMethod = "Post" },
+                    new { @class = "btn btn-success" })
+            }
+            else
+            {
+                @Ajax.ActionLink("Take back an admin role", "UpdateUserRole", new { userId = Model.Id, roleName = "admin" }, 
+                    new AjaxOptions { UpdateTargetId = "row" + Model.Id, HttpMethod = "Post" },
+                    new { @class = "btn btn-warning" })
+            }
+        }
+    </div>
+</td>

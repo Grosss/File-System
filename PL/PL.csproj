@@ -183,8 +183,10 @@
     <Compile Include="App_Start\UnityMvcActivator.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ProfileController.cs" />
     <Compile Include="Infrastrucuture\Mappers\DirectoryMapper.cs" />
     <Compile Include="Infrastrucuture\Mappers\FileMapper.cs" />
+    <Compile Include="Infrastrucuture\Mappers\UserMapper.cs" />
     <Compile Include="Models\DirModel.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -193,6 +195,7 @@
     <Compile Include="Models\FileModel.cs" />
     <Compile Include="Models\LoginViewModel.cs" />
     <Compile Include="Models\RegisterViewModel.cs" />
+    <Compile Include="Models\UserViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\CustomMembershipProvider.cs" />
     <Compile Include="Providers\CustomRoleProvider.cs" />
@@ -303,7 +306,10 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Account\Register.cshtml" />
-    <Content Include="Views\Home\GetDirectories.cshtml" />
+    <Content Include="Views\Home\_GetDirectories.cshtml" />
+    <Content Include="Views\Profile\MyProfile.cshtml" />
+    <Content Include="Views\Profile\GetAllUsers.cshtml" />
+    <Content Include="Views\Profile\_UpdateUserRole.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

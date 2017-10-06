@@ -1,0 +1,61 @@
+﻿@using PL.Infrastrucuture
+@using PL.Models
+@model IEnumerable<UserViewModel>
+@{
+    ViewBag.Title = "Users";
+}
+
+<div class="row">
+    <div class="panel panel-default" style="margin-top:20px">
+        <div class="panel-heading">All users</div>
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>User's roles</th>
+                    <th>Delete user</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var user in Model)
+                {
+                    <tr id="row@(user.Id)">
+                        <td>@user.Login</td>
+                        <td>@user.Email</td>
+                        <td>
+                            @foreach (var role in user.Roles)
+                            {
+                                <div>@role</div>
+                            }
+                        </td>
+                        <td>
+                            <div>
+                                @if (User.Identity.Name == user.Login)
+                                {
+                                    @:<p>You already have an admin role</p>
+                                }
+                                else
+                                {
+                                    if (!user.Roles.Contains("admin"))
+                                    {
+                                        @Ajax.ActionLink("Give an admin role", "UpdateUserRole", new { userId = user.Id, roleName = "admin" },
+                                            new AjaxOptions { UpdateTargetId = "row" + user.Id, HttpMethod = "Post" },
+                                            new { @class = "btn btn-success" })
+                                    }
+                                    else
+                                    {
+                                        @Ajax.ActionLink("Take back an admin role", "UpdateUserRole", new { userId = user.Id, roleName = "admin" },
+                                            new AjaxOptions { UpdateTargetId = "row" + user.Id, HttpMethod = "Post" },
+                                            new { @class = "btn btn-warning" })
+                                    }
+                                }
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
