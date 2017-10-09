@@ -11,8 +11,7 @@
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                 <h4 class="modal-title">Create a new folder</h4>
             </div>
-            <div class="modal-body">
-                @using (Ajax.BeginForm("CreateFolder", "Home", FormMethod.Post,
+            @using (Ajax.BeginForm("CreateFolder", "Home", FormMethod.Post,
                     new AjaxOptions()
                     {
                         InsertionMode = InsertionMode.Replace,
@@ -20,9 +19,11 @@
                         UpdateTargetId = "explorerTable",
                         OnSuccess = "onFolderCreateSuccess"
                     },
-                    new { id = "createFolderForm"}
+                    new { id = "createFolderForm" }
                     ))
-                {
+            {
+                <div class="modal-body">
+
                     @Html.AntiForgeryToken()
 
                     <br />
@@ -32,17 +33,17 @@
                         @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
                         @Html.ValidationMessageFor(m => m.Name, null, new { @class = "text-danger" })
                     </div>
+
+
+                </div>
+                <div class="divider">
                     <div class="form-group">
-                        <div class="col-md-offset-2 col-md-10">
-                            <input type="submit" class="btn btn-default" value="Create" />
-                        </div>
+                        <input id="btnCreateFolderSubmit" type="submit" class="btn btn-success col-md-offset-9" value="Create" />
+
+                        <button type="button" class="btn col-md-offset-0" data-dismiss="modal">Close</button>
                     </div>
-                }
-            </div>
-            <div class="modal-footer">
-                <input id="btnCreateFolderSubmit" type="submit" class="btn btn-success" value="Create"/>
-                <button type="button" class="btn" data-dismiss="modal">Close</button>
-            </div>
+                </div>
+            }
         </div>
 
     </div>
