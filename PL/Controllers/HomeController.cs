@@ -13,6 +13,7 @@ namespace PL.Controllers
 {
     public class HomeController : Controller
     {
+	    private const string RootDirectory = "~/Content/";
 		private readonly IFileService fileService;
 		private readonly IDirectoryService directoryService;
 
@@ -26,7 +27,7 @@ namespace PL.Controllers
 		[HttpGet]
         public ActionResult Index(string path = "")
 		{
-			var realPath = Server.MapPath("~/Content/" + path);
+			var realPath = Server.MapPath(RootDirectory + path);
 			
 	        if (!Request.RawUrl.Contains(RouteData.Values["action"].ToString()))
 	        {
@@ -36,9 +37,9 @@ namespace PL.Controllers
 	        if (Directory.Exists(realPath))
 	        {
 				if (Request.RawUrl.Last() != '/')
-		        {
-			        Response.Redirect("/Home/Index/" + path + "/");
-		        }
+				{
+					Response.Redirect("/Home/Index/" + path + "/");
+				}
 
 				var dirListModel = directoryService.GetAllDirectories(realPath).Select(d => d.ToMvcDirectory());
 		        var fileListModel = fileService.GetAllFiles(realPath).Select(f => f.ToMvcFile());
@@ -55,37 +56,51 @@ namespace PL.Controllers
 				+ " " + RouteData.Values["path"]);
         }
 
-		//[Authorize]
-		////[ChildActionOnly]
-		//public ActionResult GetDirectories(string path = "")
-		//{
-		//	var realPath = Server.MapPath("~/Content/" + path);
+		[HttpGet]
+		public ActionResult CreateFolder()
+		{
+			return PartialView("_CreateFolder", new DirModel());
+		}
 
-		//	if (!Request.RawUrl.Contains(RouteData.Values["controller"].ToString()))
-		//	{
-		//		Response.Redirect("/Home/Index/");
-		//	}
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public ActionResult CreateFolder(DirModel directory)
+		{
+			directoryService.CreateDirectory(Server.MapPath(RootDirectory + directory.Name));
+			return RedirectToAction("Index", "Home");
+		}
 
-		//	if (Directory.Exists(realPath))
-		//	{
-		//		if (Request.RawUrl.Last() != '/')
-		//		{
-		//			Response.Redirect("/Home/Index/" + path + "/");
-		//		}
+		[Authorize]
+		[ChildActionOnly]
+		public ActionResult GetDirectories(string path = "")
+		{
+			var realPath = Server.MapPath("~/Content/" + path);
 
-		//		var dirListModel = directoryService.GetAllDirectories(realPath).Select(d => d.ToMvcDirectory());
-		//		var fileListModel = fileService.GetAllFiles(realPath).Select(f => f.ToMvcFile());
+			if (!Request.RawUrl.Contains(RouteData.Values["controller"].ToString()))
+			{
+				Response.Redirect("/Home/Index/");
+			}
 
-		//		var explorerModel = new ExplorerModel
-		//		{
-		//			Directories = dirListModel,
-		//			Files = fileListModel
-		//		};
+			if (Directory.Exists(realPath))
+			{
+				if (Request.RawUrl.Last() != '/')
+				{
+					Response.Redirect("/Home/Index/" + path + "/");
+				}
 
-		//		return PartialView("_GetDirectories",explorerModel);
-		//	}
-		//	return Content(path + "ZZZ is not a valid file or directory. ZZZ " + RouteData.Values["controller"] + " " + RouteData.Values["action"]
-		//		+ " " + RouteData.Values["path"]);
-		//}
+				var dirListModel = directoryService.GetAllDirectories(realPath).Select(d => d.ToMvcDirectory());
+				var fileListModel = fileService.GetAllFiles(realPath).Select(f => f.ToMvcFile());
+
+				var explorerModel = new ExplorerModel
+				{
+					Directories = dirListModel,
+					Files = fileListModel
+				};
+
+				return PartialView("_GetDirectories", explorerModel);
+			}
+			return Content(path + "ZZZ is not a valid file or directory. ZZZ " + RouteData.Values["controller"] + " " + RouteData.Values["action"]
+				+ " " + RouteData.Values["path"]);
+		}
     }
 }

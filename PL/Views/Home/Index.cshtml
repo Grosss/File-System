@@ -5,33 +5,64 @@
 @model PL.Models.ExplorerModel
 @section Scripts
 {
-    <script src="@Url.Content("~/Scripts/custom.js")"></script>  
-}
+    <script src="@Url.Content("~/Scripts/custom.js")"></script>
+    <script src="@Url.Content("~/Scripts/jquery-ui-1.12.1.js")"></script>
 
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $(".viewDialog").on("click", function (e) {
+                e.preventDefault();
+
+                $("<div id='dialogContent'></div>")
+                    .addClass("dialog")
+                    .appendTo("body")
+                    .load(this.href)
+                    .dialog({
+                        title: $(this).attr("data-dialog-title"),
+                        close: function () { $(this).remove() },
+                        modal: true,
+                        buttons: {
+                            "Сохранить": function () {
+                                $.ajax({
+                                    url: "/Home/CreateFolder",
+                                    type: "POST",
+                                    data: $('form').serialize(),
+                                    datatype: "json",
+                                    success: function (result) {
+
+                                        $(alert("DONE"));
+                                    }
+                                });
+                            }
+                        }
+                    });
+            });
+        });
+    </script>
+}
 @*Show the current directory name using page URL. *@
 <h2>@uri.AbsolutePath</h2>
 <h2>@uri.AbsoluteUri</h2>
 <h2>@HttpContext.Current.Request.RequestContext.RouteData.Values["path"]</h2>
+@*<p> @Html.ActionLink("Добавить", "CreateFolder", "Home", new { }, new { @class = "viewDialog", data_dialog_title = "Создание модели" })</p>*@
 
 <div class="row">
     <div class="col-md-2">
-        @if (uri.AbsolutePath.ToLower() != "/home/")
+        @if (uri.AbsolutePath.ToLower() != "/home/index/")
         {
             <a title="Back" class="glyphicon glyphicon-arrow-left"
                href="@uri.AbsoluteUri.Remove(uri.AbsoluteUri.Length - uri.Segments.Last().Length)">
             </a>
-            @*@HttpContext.Current.Request.RequestContext.RouteData.Values["path"]*@
             @uri.AbsolutePath.Remove(uri.AbsolutePath.Length - uri.Segments.Last().Length)
         }
     </div>
-    @if (User.IsInRole("admin")) 
-    { 
-        <div class="col-md-1">
-            <a title="New folder" class="glyphicon glyphicon-plus col-md-1"
-               href="@uri.AbsoluteUri.Remove(uri.AbsoluteUri.Length - uri.Segments.Last().Length)">
-            </a>
+    @if (User.IsInRole("admin"))
+    {
+        <div class="col-md-2">
+            @Html.Action("CreateFolder", "Home", new { })
         </div>
-        <div class="col-md-1">
+        <div class="col-md-2">
             <a id="deleteFile" title="Delete" class="btn btn-primary glyphicon glyphicon-remove col-md-1"
                href="@uri.AbsoluteUri.Remove(uri.AbsoluteUri.Length - uri.Segments.Last().Length)">
             </a>
@@ -41,42 +72,14 @@
 
 <table class="table table-hover" style="border: none">
     <thead>
-    <tr>
-        <th>Name</th>
-        <th>Date modified</th>
-        <th>Type</th>
-        <th>Size</th>
-    </tr>
+        <tr>
+            <th>Name</th>
+            <th>Date modified</th>
+            <th>Type</th>
+            <th>Size</th>
+        </tr>
     </thead>
     <tbody id="explorerTable">
-        @foreach (var dir in Model.Directories)
-        {
-            <tr ondblclick="location.href = '@Url.Action("Index", "Home", new { path = HttpContext.Current.Request.RequestContext.RouteData.Values["path"] + dir.Name + "/" })'">
-                <td>
-                    <img src="~/Content/generic-folder.ico" alt="Folder icon" align="top" style="width: 20px; height: 20px; border: none" />
-                    @dir.Name
-                </td>
-                <td>@dir.LastAccessTime</td>
-                <td>File folder</td>
-                <td></td>
-            </tr>
-        }
-        @foreach (var file in Model.Files)
-        {
-            <tr>
-                <td>
-                    @file.Name
-                </td>
-                <td>@file.LastAccessTime</td>
-                <td>@file.Extension.ToUpper().Substring(1) File</td>
-                <td>@file.FileSizeText</td>
-            </tr>
-        }
-        @*@Html.Action("GetDirectories", "Home", new { path = HttpContext.Current.Request.RequestContext.RouteData.Values["path"] })*@
+        @Html.Action("GetDirectories", "Home", new { path = (string)@HttpContext.Current.Request.RequestContext.RouteData.Values["path"] })
     </tbody>
 </table>
-<div id="explorer">
-    @*@Ajax.ActionLink("Dirs", "GetDirectories", "Home",
-             new {path = HttpContext.Current.Request.RequestContext.RouteData.Values["path"]},
-             new AjaxOptions {UpdateTargetId = "explorer", Url = Url.Action("Index", "Home", new {path = HttpContext.Current.Request.RequestContext.RouteData.Values["path"]})})*@
-</div>
