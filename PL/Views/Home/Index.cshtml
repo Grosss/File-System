@@ -1,51 +1,36 @@
-﻿@{
+﻿@model PL.Models.ExplorerModel
+@{
     ViewBag.Title = "Index";
+    ViewBag.CurrentPath = HttpContext.Current.Request.RequestContext.RouteData.Values["path"];
     Uri uri = Request.Url;
 }
-@model PL.Models.ExplorerModel
 @section Scripts
 {
-    <script src="@Url.Content("~/Scripts/custom.js")"></script>
-    <script src="@Url.Content("~/Scripts/jquery-ui-1.12.1.js")"></script>
-
     <script type="text/javascript">
+
+        function onFolderCreateSuccess() {
+            $("#createFolderModal").modal("hide");
+        };
+
         $(document).ready(function () {
+            $("#btnCreateFolderSubmit").click(function() {
+                var formData = $("#createFolderForm").serialize();
 
-            $(".viewDialog").on("click", function (e) {
-                e.preventDefault();
-
-                $("<div id='dialogContent'></div>")
-                    .addClass("dialog")
-                    .appendTo("body")
-                    .load(this.href)
-                    .dialog({
-                        title: $(this).attr("data-dialog-title"),
-                        close: function () { $(this).remove() },
-                        modal: true,
-                        buttons: {
-                            "Сохранить": function () {
-                                $.ajax({
-                                    url: "/Home/CreateFolder",
-                                    type: "POST",
-                                    data: $('form').serialize(),
-                                    datatype: "json",
-                                    success: function (result) {
-
-                                        $(alert("DONE"));
-                                    }
-                                });
-                            }
-                        }
-                    });
+                $.ajax({
+                    type: "POST",
+                    url: "/Home/CreateFolder",
+                    data: formData,
+                    success: onFolderCreateSuccess()
+                });
             });
         });
     </script>
 }
+
 @*Show the current directory name using page URL. *@
 <h2>@uri.AbsolutePath</h2>
 <h2>@uri.AbsoluteUri</h2>
 <h2>@HttpContext.Current.Request.RequestContext.RouteData.Values["path"]</h2>
-@*<p> @Html.ActionLink("Добавить", "CreateFolder", "Home", new { }, new { @class = "viewDialog", data_dialog_title = "Создание модели" })</p>*@
 
 <div class="row">
     <div class="col-md-2">

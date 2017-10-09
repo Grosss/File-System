@@ -14,6 +14,7 @@ namespace PL.Controllers
     public class HomeController : Controller
     {
 	    private const string RootDirectory = "~/Content/";
+
 		private readonly IFileService fileService;
 		private readonly IDirectoryService directoryService;
 
@@ -67,7 +68,15 @@ namespace PL.Controllers
 		public ActionResult CreateFolder(DirModel directory)
 		{
 			directoryService.CreateDirectory(Server.MapPath(RootDirectory + directory.Name));
-			return RedirectToAction("Index", "Home");
+			//return RedirectToAction("Index", "Home");
+			var dirListModel = directoryService.GetAllDirectories(Server.MapPath(RootDirectory)).Select(d => d.ToMvcDirectory());
+			var fileListModel = fileService.GetAllFiles(Server.MapPath(RootDirectory)).Select(f => f.ToMvcFile());
+			var explorerModel = new ExplorerModel
+			{
+				Directories = dirListModel,
+				Files = fileListModel
+			};
+			return PartialView("_GetDirectories", explorerModel);
 		}
 
 		[Authorize]

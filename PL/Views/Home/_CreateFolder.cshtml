@@ -2,13 +2,9 @@
 @{
     Layout = null;
 }
-<script>
-    function OnSuccess() {
-        $("myModal").modal("hide");
-    }
-</script>
-<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Create folder</button>
-<div class="modal fade" id="myModal" role="dialog">
+
+<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#createFolderModal">Create folder</button>
+<div class="modal fade" id="createFolderModal" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -16,14 +12,16 @@
                 <h4 class="modal-title">Create a new folder</h4>
             </div>
             <div class="modal-body">
-                @using (Ajax.BeginForm("CreateFolder", "Home", FormMethod.Post, @*new { @class = "form-horizontal", role = "form" },*@ 
+                @using (Ajax.BeginForm("CreateFolder", "Home", FormMethod.Post,
                     new AjaxOptions()
                     {
                         InsertionMode = InsertionMode.Replace,
                         HttpMethod = "POST",
                         UpdateTargetId = "explorerTable",
-                        OnSuccess = "OnSuccess"
-                    }))
+                        OnSuccess = "onFolderCreateSuccess"
+                    },
+                    new { id = "createFolderForm"}
+                    ))
                 {
                     @Html.AntiForgeryToken()
 
@@ -42,31 +40,10 @@
                 }
             </div>
             <div class="modal-footer">
-                <input id="btnSubmit" type="submit" class="btn btn-default" value="Create" />
+                <input id="btnCreateFolderSubmit" type="submit" class="btn btn-success" value="Create"/>
                 <button type="button" class="btn" data-dismiss="modal">Close</button>
             </div>
         </div>
 
     </div>
 </div>
-
-
-
-@*@using (Html.BeginForm())
-    {
-        @Html.AntiForgeryToken()
-
-        <div>
-            <h4>Новая модель</h4>
-
-            @Html.ValidationSummary(true)
-            <div>
-                @Html.LabelFor(model => model.Name)
-                <div>
-                    @Html.EditorFor(model => model.Name)
-                    @Html.ValidationMessageFor(model => model.Name, "")
-                </div>
-            </div>
-
-        </div>
-    }*@
