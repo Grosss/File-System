@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.AccessControl;
 using BLL.Interface.Entities;
 using BLL.Interface.Services;
 
@@ -24,9 +25,13 @@ namespace BLL.Services
 			throw new System.NotImplementedException();
 		}
 
-		public void CreateDirectory(DirectoryEntity entity)
+		public void CreateDirectory(string path)
 		{
-			throw new System.NotImplementedException();
+			if (Directory.Exists(path))
+			{
+				return;
+			}
+			Directory.CreateDirectory(path);
 		}
 
 		public void DeleteDirectory(string path)
