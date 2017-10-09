@@ -32,7 +32,6 @@ namespace PL
 				"~/Content/bootstrap-sandstone.css", 
 				"~/Content/site.css"));
 			
-			// decide what to do with this jquery.ui
 			bundles.Add(new StyleBundle("~/Content/themes/base/css").Include(
 						"~/Content/themes/base/jquery.ui.core.css",
 						"~/Content/themes/base/jquery.ui.resizable.css",
