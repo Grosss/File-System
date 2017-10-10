@@ -16,36 +16,6 @@
             $("#uploadFileModal").modal("hide");
         };
 
-        function fail() {
-            alert("failfish");
-        };
-
-        //$("#btnUploadFileSubmit").click(function () {
-        //    var formData = new FormData();
-        //    var totalFiles = document.getElementById("fileUpload").files.length;
-        //    for (var i = 0; i < totalFiles; i++) {
-        //        var file = document.getElementById("fileUpload").files[i];
-
-        //        formData.append("fileUpload", file);
-        //    }
-        //    $.ajax({
-        //        type: "POST",
-        //        url: '/Home/UploadFilePost',
-        //        data: formData,
-        //        dataType: 'json',
-        //        contentType: false,
-        //        processData: false,
-        //        success: function (response) {
-        //            alert('succes!!');
-        //            onFileUploadSuccess();
-        //        },
-        //        error: function (error) {
-        //            alert("errror");
-        //            fail();
-        //        }
-        //    });
-        //});
-
         $(document).ready(function () {
             //$("#btnCreateFolderSubmit").click(function() {
             //    var formData = $("#createFolderForm").serialize();
@@ -61,23 +31,24 @@
     </script>
 }
 
-@*Show the current directory name using page URL. *@
-<h2>@uri.AbsolutePath</h2>
-<h2>@uri.AbsoluteUri</h2>
-
 <div class="row">
-    <div class="col-md-2">
+    <div class="col-md-12">
         @if (uri.AbsolutePath.ToLower() != "/home/index/")
         {
             <a title="Back" class="glyphicon glyphicon-arrow-left"
                href="@uri.AbsoluteUri.Remove(uri.AbsoluteUri.Length - uri.Segments.Last().Length)">
             </a>
-            @uri.AbsolutePath.Remove(uri.AbsolutePath.Length - uri.Segments.Last().Length)
+            <img src="~/Content/generic-folder.ico" alt="Folder icon" align="top" style="width: 20px; height: 20px; border: none" />
+            @uriPath.Replace("/", " > ");
+        }
+        else
+        {
+            <img src="~/Content/generic-folder.ico" alt="Folder icon" align="top" style="width: 20px; height: 20px; border: none" />
         }
     </div>
     @if (User.IsInRole("admin"))
     {
-        <div class="col-md-2">
+        <div class="col-md-offset-2 col-md-2">
             @Html.Action("CreateFolder", "Home", new { })
         </div>
         <div class="col-md-2">

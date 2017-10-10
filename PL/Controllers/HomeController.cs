@@ -99,27 +99,21 @@ namespace PL.Controllers
 
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public ActionResult UploadFile(HttpPostedFileBase file, string path = "")
+		public ActionResult UploadFile(HttpPostedFileBase file, string uriPath = "")
 		{
-			if (file.ContentLength > 0)
+			if (file == null)
 			{
 				return RedirectToAction("Index", "Home");
 			}
+
 			if (ModelState.IsValid)
 			{
-				var fileName = Path.GetFileName(file.FileName);
-				var folderPath = Server.MapPath(RootDirectory + path);
-				var realPath = Path.Combine(folderPath, fileName);
+				var folderPath = Server.MapPath(RootDirectory + uriPath);
+				
+				var realPath = Path.Combine(folderPath, Path.GetFileName(file.FileName));
 				file.SaveAs(realPath);
 
-				var dirListModel = directoryService.GetAllDirectories(folderPath).Select(d => d.ToMvcDirectory());
-				var fileListModel = fileService.GetAllFiles(folderPath).Select(f => f.ToMvcFile());
-				var explorerModel = new ExplorerModel
-				{
-					Directories = dirListModel,
-					Files = fileListModel
-				};
-				return PartialView("_GetDirectories", explorerModel);
+				return RedirectToAction("Index", "Home", new { path = uriPath });
 			}
 			return PartialView();
 		}
