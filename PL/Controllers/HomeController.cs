@@ -155,15 +155,14 @@ namespace PL.Controllers
 			}
 			return PartialView();
 		}
-
+		
 		[HttpPost]
 		[Authorize(Roles = "admin")]
-		public ActionResult DeleteFile(string jsonObject)
+		public ActionResult DeleteFile(DeleteViewModel jsonObject)
 		{
-			JToken token = JObject.Parse(jsonObject);
-			var name = (string) token.SelectToken("name");
-			var type = (string) token.SelectToken("type");
-			var path = (string) token.SelectToken("path");
+			var name = jsonObject.Name;
+			var type = jsonObject.Type;
+			var path = jsonObject.Path ?? "";
 			var realPath = Server.MapPath(RootDirectory + path);
 
 			if (type.ToLower().Contains("folder"))
@@ -172,7 +171,7 @@ namespace PL.Controllers
 			}
 			else
 			{
-				fileService.DeleteFile(realPath + name + "." + type.ToLower());
+				fileService.DeleteFile(realPath + name);
 			}
 
 			var dirListModel = directoryService.GetAllDirectories(realPath).Select(d => d.ToMvcDirectory());

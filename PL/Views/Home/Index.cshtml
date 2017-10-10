@@ -34,14 +34,18 @@
                 $("#deleteButton").prop("disabled", false);
                 $(this).addClass("chosen");
                 var tds = self.children("td");
-                name = tds[0].innerText;
+                name = tds[0].innerText.trim();
                 type = tds[2].innerText;
             }
         });
 
         $("#deleteButton").click(function() {
             console.log(name + " " + type);
-            var jsonObject = { "name": name, "type": type, "path": "@HttpContext.Current.Request.RequestContext.RouteData.Values["path"]" }
+            var jsonObject = {
+                "name": name,
+                "type": type,
+                "path": "@HttpContext.Current.Request.RequestContext.RouteData.Values["path"]"
+            };
             console.log(jsonObject);
             console.log(JSON.stringify(jsonObject));
             console.log(JSON.stringify(jsonObject));
@@ -52,7 +56,7 @@
                     type: "POST",
                     dataType: "json",
                     data: JSON.stringify(jsonObject),
-                    contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+                    contentType: "application/json; charset=UTF-8",
                     success: function(data) {
                         alert(data); 
                         $(".chosen").remove();

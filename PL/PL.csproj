@@ -187,6 +187,7 @@
     <Compile Include="Infrastrucuture\Mappers\DirectoryMapper.cs" />
     <Compile Include="Infrastrucuture\Mappers\FileMapper.cs" />
     <Compile Include="Infrastrucuture\Mappers\UserMapper.cs" />
+    <Compile Include="Models\DeleteViewModel.cs" />
     <Compile Include="Models\DirModel.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
