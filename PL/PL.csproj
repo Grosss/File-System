@@ -311,6 +311,7 @@
     <Content Include="Views\Profile\GetAllUsers.cshtml" />
     <Content Include="Views\Profile\_UpdateUserRole.cshtml" />
     <Content Include="Views\Home\_CreateFolder.cshtml" />
+    <Content Include="Views\Home\_UploadFile.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
