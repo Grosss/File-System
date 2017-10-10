@@ -65,18 +65,63 @@ namespace PL.Controllers
 
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public ActionResult CreateFolder(DirModel directory)
+		public ActionResult CreateFolder(DirModel directoryModel, string path = "")
 		{
-			directoryService.CreateDirectory(Server.MapPath(RootDirectory + directory.Name));
-			//return RedirectToAction("Index", "Home");
-			var dirListModel = directoryService.GetAllDirectories(Server.MapPath(RootDirectory)).Select(d => d.ToMvcDirectory());
-			var fileListModel = fileService.GetAllFiles(Server.MapPath(RootDirectory)).Select(f => f.ToMvcFile());
-			var explorerModel = new ExplorerModel
+			var realPath = Server.MapPath(RootDirectory + path);
+
+			if (Directory.Exists(realPath + directoryModel.Name))
 			{
-				Directories = dirListModel,
-				Files = fileListModel
-			};
-			return PartialView("_GetDirectories", explorerModel);
+				ModelState.AddModelError("", "Such folder is already exists");
+				return View("_CreateFolder", directoryModel);
+			}
+
+			if (ModelState.IsValid)
+			{
+				directoryService.CreateDirectory(realPath + directoryModel.Name);
+
+				var dirListModel = directoryService.GetAllDirectories(realPath).Select(d => d.ToMvcDirectory());
+				var fileListModel = fileService.GetAllFiles(realPath).Select(f => f.ToMvcFile());
+				var explorerModel = new ExplorerModel
+				{
+					Directories = dirListModel,
+					Files = fileListModel
+				};
+				return PartialView("_GetDirectories", explorerModel);
+			}
+			return PartialView(directoryModel);
+		}
+
+		[HttpGet]
+		public ActionResult UploadFile()
+		{
+			return PartialView("_UploadFile");
+		}
+
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public ActionResult UploadFile(HttpPostedFileBase file, string path = "")
+		{
+			if (file.ContentLength > 0)
+			{
+				return RedirectToAction("Index", "Home");
+			}
+			if (ModelState.IsValid)
+			{
+				var fileName = Path.GetFileName(file.FileName);
+				var folderPath = Server.MapPath(RootDirectory + path);
+				var realPath = Path.Combine(folderPath, fileName);
+				file.SaveAs(realPath);
+
+				var dirListModel = directoryService.GetAllDirectories(folderPath).Select(d => d.ToMvcDirectory());
+				var fileListModel = fileService.GetAllFiles(folderPath).Select(f => f.ToMvcFile());
+				var explorerModel = new ExplorerModel
+				{
+					Directories = dirListModel,
+					Files = fileListModel
+				};
+				return PartialView("_GetDirectories", explorerModel);
+			}
+			return PartialView();
 		}
 
 		[Authorize]

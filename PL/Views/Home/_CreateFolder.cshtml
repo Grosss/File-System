@@ -33,6 +33,7 @@
                         @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
                         @Html.ValidationMessageFor(m => m.Name, null, new { @class = "text-danger" })
                     </div>
+                    @Html.Hidden("path", ViewContext.RouteData.Values["path"])
 
 
                 </div>

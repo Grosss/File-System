@@ -1,7 +1,7 @@
 ﻿@model PL.Models.ExplorerModel
 @{
     ViewBag.Title = "Index";
-    ViewBag.CurrentPath = HttpContext.Current.Request.RequestContext.RouteData.Values["path"];
+    var uriPath = (string)HttpContext.Current.Request.RequestContext.RouteData.Values["path"];
     Uri uri = Request.Url;
 }
 @section Scripts
@@ -11,6 +11,40 @@
         function onFolderCreateSuccess() {
             $("#createFolderModal").modal("hide");
         };
+
+        function onFileUploadSuccess() {
+            $("#uploadFileModal").modal("hide");
+        };
+
+        function fail() {
+            alert("failfish");
+        };
+
+        //$("#btnUploadFileSubmit").click(function () {
+        //    var formData = new FormData();
+        //    var totalFiles = document.getElementById("fileUpload").files.length;
+        //    for (var i = 0; i < totalFiles; i++) {
+        //        var file = document.getElementById("fileUpload").files[i];
+
+        //        formData.append("fileUpload", file);
+        //    }
+        //    $.ajax({
+        //        type: "POST",
+        //        url: '/Home/UploadFilePost',
+        //        data: formData,
+        //        dataType: 'json',
+        //        contentType: false,
+        //        processData: false,
+        //        success: function (response) {
+        //            alert('succes!!');
+        //            onFileUploadSuccess();
+        //        },
+        //        error: function (error) {
+        //            alert("errror");
+        //            fail();
+        //        }
+        //    });
+        //});
 
         $(document).ready(function () {
             //$("#btnCreateFolderSubmit").click(function() {
@@ -30,7 +64,6 @@
 @*Show the current directory name using page URL. *@
 <h2>@uri.AbsolutePath</h2>
 <h2>@uri.AbsoluteUri</h2>
-<h2>@HttpContext.Current.Request.RequestContext.RouteData.Values["path"]</h2>
 
 <div class="row">
     <div class="col-md-2">
@@ -46,6 +79,9 @@
     {
         <div class="col-md-2">
             @Html.Action("CreateFolder", "Home", new { })
+        </div>
+        <div class="col-md-2">
+            @Html.Action("UploadFile", "Home", new { })
         </div>
         <div class="col-md-2">
             <a id="deleteFile" title="Delete" class="btn btn-primary glyphicon glyphicon-remove col-md-1"
@@ -65,6 +101,6 @@
         </tr>
     </thead>
     <tbody id="explorerTable">
-        @Html.Action("GetDirectories", "Home", new { path = (string)@HttpContext.Current.Request.RequestContext.RouteData.Values["path"] })
+        @Html.Action("GetDirectories", "Home", new { path = uriPath })
     </tbody>
 </table>
