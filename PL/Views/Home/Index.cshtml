@@ -8,26 +8,63 @@
 {
     <script type="text/javascript">
 
-        function onFolderCreateSuccess() {
-            $("#createFolderModal").modal("hide");
-        };
+    function onFolderCreateSuccess() {
+        $("#createFolderModal").modal("hide");
+    };
 
-        function onFileUploadSuccess() {
-            $("#uploadFileModal").modal("hide");
-        };
+    function onFileUploadSuccess() {
+        $("#uploadFileModal").modal("hide");
+    };
 
-        $(document).ready(function () {
-            //$("#btnCreateFolderSubmit").click(function() {
-            //    var formData = $("#createFolderForm").serialize();
 
-            //    $.ajax({
-            //        type: "POST",
-            //        url: "/Home/CreateFolder",
-            //        data: "",
-            //        success: onFolderCreateSuccess()
-            //    });
-            //});
+
+    $(document).ready(function() {
+        var name = "";
+        var type = "";
+
+        $("#deleteButton").prop("disabled", true);
+        $("#explorerTable tr").click(function() {
+            var self = $(this);
+            var selected = self.hasClass("chosen");
+            $("#explorerTable tr").removeClass("chosen");
+            name = "";
+            type = "";
+            $("#deleteButton").prop("disabled", true);
+            if (!selected) {
+                $("#deleteButton").prop("disabled", false);
+                $(this).addClass("chosen");
+                var tds = self.children("td");
+                name = tds[0].innerText;
+                type = tds[2].innerText;
+            }
         });
+
+        $("#deleteButton").click(function() {
+            console.log(name + " " + type);
+            var jsonObject = { "name": name, "type": type, "path": "@HttpContext.Current.Request.RequestContext.RouteData.Values["path"]" }
+            console.log(jsonObject);
+            console.log(JSON.stringify(jsonObject));
+            console.log(JSON.stringify(jsonObject));
+            var isConfirmed = confirm("Are you sure?");
+            if (isConfirmed === true) {
+                $.ajax({
+                    url: "/Home/DeleteFile",
+                    type: "POST",
+                    dataType: "json",
+                    data: JSON.stringify(jsonObject),
+                    contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+                    success: function(data) {
+                        alert(data); 
+                        $(".chosen").remove();
+                    },
+                    failure: function (errMsg) {
+                        alert(errMsg);
+                    }
+                });
+            }
+        });
+
+    });
     </script>
 }
 
@@ -55,9 +92,15 @@
             @Html.Action("UploadFile", "Home", new { })
         </div>
         <div class="col-md-2">
-            <a id="deleteFile" title="Delete" class="btn btn-primary glyphicon glyphicon-remove col-md-1"
+            
+            @*<a id="deleteFile" title="Delete" class="btn btn-primary glyphicon glyphicon-remove col-md-1"
                href="@uri.AbsoluteUri.Remove(uri.AbsoluteUri.Length - uri.Segments.Last().Length)">
-            </a>
+            </a>*@
+            <button id="deleteButton" class="btn btn-danger">Remove</button>
+
+            @*@Ajax.ActionLink("Remove", "Remove", new { userId = user.Id, roleName = "admin" },
+                                             new AjaxOptions { UpdateTargetId = "explorerTable", HttpMethod = "Post" },
+                                            new { @class = "btn btn-success" })*@
         </div>
     }
 </div>

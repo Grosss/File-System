@@ -3,7 +3,7 @@
 @foreach (var dir in Model.Directories)
 {
     <tr ondblclick="location.href = '@Url.Action("Index", "Home", new { path = HttpContext.Current.Request.RequestContext.RouteData.Values["path"] + dir.Name + "/" })'">
-        <td>
+        <td class="name">
             <img src="~/Content/generic-folder.ico" alt="Folder icon" align="top" style="width: 20px; height: 20px; border: none" />
             @dir.Name
         </td>
@@ -15,7 +15,7 @@
 @foreach (var file in Model.Files)
 {
     <tr>
-        <td>
+        <td class="name">
             @file.Name
         </td>
         <td>@file.LastAccessTime</td>
