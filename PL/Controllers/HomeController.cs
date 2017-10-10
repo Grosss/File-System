@@ -13,7 +13,7 @@ namespace PL.Controllers
 {
     public class HomeController : Controller
     {
-	    private const string RootDirectory = "~/Content/";
+	    private const string RootDirectory = "~/ExplorerFolder/";
 
 		private readonly IFileService fileService;
 		private readonly IDirectoryService directoryService;
@@ -122,7 +122,7 @@ namespace PL.Controllers
 		[ChildActionOnly]
 		public ActionResult GetDirectories(string path = "")
 		{
-			var realPath = Server.MapPath("~/Content/" + path);
+			var realPath = Server.MapPath(RootDirectory + path);
 
 			if (!Request.RawUrl.Contains(RouteData.Values["controller"].ToString()))
 			{
