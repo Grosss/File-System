@@ -17,8 +17,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PL", "PL\PL.csproj", "{E64C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DependencyResloverModule", "DependencyResloverModule\DependencyResloverModule.csproj", "{3C2C98B1-A387-436A-90AA-5D8C56036E6F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{EF7B34A4-BEB9-44C5-8527-58C2D2F57688}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "UnitTests\UnitTests.csproj", "{ACA2F6E6-BEC7-4D97-91CC-50F797ACEB6A}"
 EndProject
 Global
@@ -55,10 +53,6 @@ Global
 		{3C2C98B1-A387-436A-90AA-5D8C56036E6F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3C2C98B1-A387-436A-90AA-5D8C56036E6F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3C2C98B1-A387-436A-90AA-5D8C56036E6F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{EF7B34A4-BEB9-44C5-8527-58C2D2F57688}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EF7B34A4-BEB9-44C5-8527-58C2D2F57688}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EF7B34A4-BEB9-44C5-8527-58C2D2F57688}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EF7B34A4-BEB9-44C5-8527-58C2D2F57688}.Release|Any CPU.Build.0 = Release|Any CPU
 		{ACA2F6E6-BEC7-4D97-91CC-50F797ACEB6A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{ACA2F6E6-BEC7-4D97-91CC-50F797ACEB6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ACA2F6E6-BEC7-4D97-91CC-50F797ACEB6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
