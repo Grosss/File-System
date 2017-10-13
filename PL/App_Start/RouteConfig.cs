@@ -13,15 +13,11 @@ namespace PL
 		{
 			routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
+			// Add such route in future
 			//routes.MapRoute(
-			//	name: "Home",
-			//	url: "Home/{*path}",
-			//	defaults: new
-			//	{
-			//		controller = "Home",
-			//		action = "Index",
-			//		path = UrlParameter.Optional
-			//	}
+			//	name: "Default",
+			//	url: "{controller}/{action}/{drive}/{*path}",
+			//	defaults: new { controller = "Home", action = "Index", drive = UrlParameter.Optional, path = UrlParameter.Optional }
 			//);
 
 			routes.MapRoute(

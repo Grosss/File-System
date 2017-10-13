@@ -19,7 +19,7 @@
             @file.Name
         </td>
         <td>@file.LastAccessTime</td>
-        <td>@file.Extension.ToUpper().Substring(1) File</td>
+        <td>@file.Extension.ToUpper().Replace(".", "") File</td>
         <td>@file.FileSizeText</td>
     </tr>
 }

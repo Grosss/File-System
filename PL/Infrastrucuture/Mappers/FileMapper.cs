@@ -11,7 +11,7 @@ namespace PL.Infrastrucuture.Mappers
 			{
 				Name = file.Name,
 				FileSizeText = file.FileSizeText,
-				Extension = file.Extension,
+				Extension = file.Extension ?? "",
 				LastAccessTime = file.LastAccessTime
 			};
 		}
