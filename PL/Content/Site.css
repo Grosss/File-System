@@ -71,3 +71,19 @@ tr.chosen{
 .non-chosen {
     background: white;
 }
+
+.folder {
+    background: white;
+}
+
+.folderName {
+    background: white;
+}
+
+.file {
+    background: white;
+}
+
+.fileName {
+    background: white;
+}
