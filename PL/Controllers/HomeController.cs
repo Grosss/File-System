@@ -62,7 +62,7 @@ namespace PL.Controllers
 		[ChildActionOnly]
 		public ActionResult GetDirectories(string path = "")
 		{
-			var realPath = Server.MapPath(RootDirectory + path);
+			var realPath = Server.MapPath(RootDirectory + (path));
 
 			if (!Request.RawUrl.Contains(RouteData.Values["controller"].ToString()))
 			{
