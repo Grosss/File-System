@@ -189,12 +189,13 @@
     <Compile Include="Infrastrucuture\Mappers\FileMapper.cs" />
     <Compile Include="Infrastrucuture\Mappers\UserMapper.cs" />
     <Compile Include="Models\DeleteViewModel.cs" />
-    <Compile Include="Models\DirModel.cs" />
+    <Compile Include="Models\DirectoryViewModel.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\DriveViewModel.cs" />
     <Compile Include="Models\ExplorerModel.cs" />
-    <Compile Include="Models\FileModel.cs" />
+    <Compile Include="Models\FileViewModel.cs" />
     <Compile Include="Models\LoginViewModel.cs" />
     <Compile Include="Models\RegisterViewModel.cs" />
     <Compile Include="Models\UserViewModel.cs" />
@@ -213,6 +214,7 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\drive.jpg" />
     <Content Include="Content\generic-folder.ico" />
     <Content Include="Content\themes\base\accordion.css" />
     <Content Include="Content\themes\base\all.css" />
@@ -305,7 +307,7 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
-    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Home\Explorer.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Account\Register.cshtml" />
     <Content Include="Views\Home\_GetDirectories.cshtml" />
@@ -317,6 +319,7 @@
     <Content Include="Views\Error\NotFound.cshtml" />
     <Content Include="Views\Error\Forbidden.cshtml" />
     <Content Include="Views\Error\BadRequest.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="ExplorerFolder\" />

@@ -1,51 +1,19 @@
-﻿@model PL.Models.ExplorerModel
+﻿@model IEnumerable<PL.Models.DriveViewModel>
 @{
-    ViewBag.Title = "Index";
-    var uriPath = (string)HttpContext.Current.Request.RequestContext.RouteData.Values["path"];
-    Uri uri = Request.Url;
+    ViewBag.Title = ViewBag.HostName;
 }
-@Scripts.Render("~/bundles/custom")
 
-<input type="hidden" id="uriPath" value="@HttpContext.Current.Request.RequestContext.RouteData.Values["path"]" />
 <div class="row">
-    <div class="col-md-12">
-        @if (uri.AbsolutePath.ToLower() != "/home/index/")
+        @foreach (var drive in Model)
         {
-            <a title="Back" class="glyphicon glyphicon-arrow-left"
-               href="@uri.AbsoluteUri.Remove(uri.AbsoluteUri.Length - uri.Segments.Last().Length)">
-            </a>
-            <img src="~/Content/generic-folder.ico" alt="Folder icon" align="top" style="width: 20px; height: 20px; border: none" />
-            @uriPath.Replace("/", " > ");
+            <div class="col-md-3" ondblclick="location.href = '@Url.Action("Explorer", "Home", new { path = drive.Name.Replace(":\\", "") })'">
+                <div class="col-md-4">
+                    <img src="~/Content/drive.jpg" alt="Drive icon" align="top" style="width: 100%; height: 100%; border: none" />
+                </div>
+                <div class="col-md-8" style="font-size: smaller">
+                    <p>@drive.VolumeLabel (@drive.Name.Replace("\\", ""))</p>
+                    <p>@drive.TotalFreeSpace free of @drive.TotalSize</p>
+                </div>
+            </div>
         }
-        else
-        {
-            <img src="~/Content/generic-folder.ico" alt="Folder icon" align="top" style="width: 20px; height: 20px; border: none" />
-        }
-    </div>
-    @if (User.IsInRole("admin"))
-    {
-        <div class="col-md-offset-2 col-md-2">
-            @Html.Action("CreateFolder", "Home", new { })
-        </div>
-        <div class="col-md-2">
-            @Html.Action("UploadFile", "Home", new { })
-        </div>
-        <div class="col-md-2">
-            <button id="deleteButton" class="btn btn-danger">Remove</button>
-        </div>
-    }
 </div>
-
-<table class="table table-hover" style="border: none">
-    <thead>
-        <tr>
-            <th>Name</th>
-            <th>Date modified</th>
-            <th>Type</th>
-            <th>Size</th>
-        </tr>
-    </thead>
-    <tbody id="explorerTable">
-        @Html.Action("GetDirectories", "Home", new { path = uriPath })
-    </tbody>
-</table>

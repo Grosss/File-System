@@ -1,4 +1,4 @@
-﻿function onFolderCreateSuccess(data) {
+﻿function onFolderCreateSuccess() {
     $("#createFolderModal").modal("hide");
 
     $(document).ready(function () {
@@ -29,7 +29,6 @@
                 "type": type,
                 "path": $("#uriPath").val()
             };
-            console.log(jsonObject);
             console.log(JSON.stringify(jsonObject));
             var isConfirmed = confirm("Are you sure?");
             if (isConfirmed === true) {
@@ -48,7 +47,7 @@
                         $("tr.folder").each(function () {
                             var folderName = $(this).children("td")[0].innerText.trim();
                             console.log($("td.folderName"));
-                            var dblStr = "location.href = '/Home/Index/" + $("#uriPath").val() + folderName + "/'";
+                            var dblStr = "location.href = '/Home/Explorer/" + $("#uriPath").val() + folderName + "/'";
                             $(this).attr("ondblclick", dblStr);
                         });
                     },
@@ -115,7 +114,6 @@ function onFileUploadSuccess() {
                 "type": type,
                 "path": $("#uriPath").val()
             };
-            console.log(jsonObject);
             console.log(JSON.stringify(jsonObject));
             var isConfirmed = confirm("Are you sure?");
             if (isConfirmed === true) {
@@ -134,7 +132,7 @@ function onFileUploadSuccess() {
                         $("tr.folder").each(function () {
                             var folderName = $(this).children("td")[0].innerText.trim();
                             console.log($("td.folderName"));
-                            var dblStr = "location.href = '/Home/Index/" + $("#uriPath").val() + folderName + "/'";
+                            var dblStr = "location.href = '/Home/Explorer/" + $("#uriPath").val() + folderName + "/'";
                             $(this).attr("ondblclick", dblStr);
                         });
                     },

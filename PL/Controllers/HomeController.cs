@@ -24,23 +24,38 @@ namespace PL.Controllers
 			this.fileService = fileService;
 			this.directoryService = directoryService;
 		}
+
+	    [Authorize]
+	    [HttpGet]
+	    public ActionResult Index()
+	    {
+		    ViewBag.HostName = Environment.MachineName;
+		    var drives = DriveInfo.GetDrives().Select(drive => new DriveViewModel
+		    {
+			    Name = drive.Name,
+				VolumeLabel = drive.VolumeLabel,
+				TotalFreeSpace = String.Format("{0} GB", (int) (drive.TotalFreeSpace / Math.Pow(2, 30))),
+				TotalSize = String.Format("{0} GB", (int) (drive.TotalSize / Math.Pow(2, 30)))
+		    });
+		    return View("Index", drives);
+	    }
 		
 		[Authorize]
 		[HttpGet]
-        public ActionResult Index(string path = "")
+        public ActionResult Explorer(string path = "")
 		{
 			var realPath = Server.MapPath(RootDirectory + path);
 			
 	        if (!Request.RawUrl.Contains(RouteData.Values["action"].ToString()))
 	        {
-				Response.Redirect("/Home/Index/");
+				Response.Redirect("/Home/Explorer/");
 	        }
 
 	        if (Directory.Exists(realPath))
 	        {
 				if (Request.RawUrl.Last() != '/')
 				{
-					Response.Redirect("/Home/Index/" + path + "/");
+					Response.Redirect("/Home/Explorer/" + path + "/");
 				}
 
 				var dirListModel = directoryService.GetAllDirectories(realPath).Select(d => d.ToMvcDirectory());
@@ -66,14 +81,14 @@ namespace PL.Controllers
 
 			if (!Request.RawUrl.Contains(RouteData.Values["controller"].ToString()))
 			{
-				Response.Redirect("/Home/Index/");
+				Response.Redirect("/Home/Explorer/");
 			}
 
 			if (Directory.Exists(realPath))
 			{
 				if (Request.RawUrl.Last() != '/')
 				{
-					Response.Redirect("/Home/Index/" + path + "/");
+					Response.Redirect("/Home/Explorer/" + path + "/");
 				}
 
 				var dirListModel = directoryService.GetAllDirectories(realPath).Select(d => d.ToMvcDirectory());
@@ -95,13 +110,13 @@ namespace PL.Controllers
 		[HttpGet]
 		public ActionResult CreateFolder()
 		{
-			return PartialView("_CreateFolder", new DirModel());
+			return PartialView("_CreateFolder", new DirectoryViewModel());
 		}
 
 		[Authorize(Roles = "admin")]
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public ActionResult CreateFolder(DirModel directoryModel, string path = "")
+		public ActionResult CreateFolder(DirectoryViewModel directoryModel, string path = "")
 		{
 			var realPath = Server.MapPath(RootDirectory + path);
 
@@ -141,7 +156,7 @@ namespace PL.Controllers
 		{
 			if (file == null)
 			{
-				return RedirectToAction("Index", "Home");
+				return RedirectToAction("Explorer", "Home");
 			}
 
 			if (ModelState.IsValid)
@@ -151,7 +166,7 @@ namespace PL.Controllers
 				var realPath = Path.Combine(folderPath, Path.GetFileName(file.FileName));
 				file.SaveAs(realPath);
 
-				return RedirectToAction("Index", "Home", new { path = uriPath });
+				return RedirectToAction("Explorer", "Home", new { path = uriPath });
 			}
 			return PartialView();
 		}

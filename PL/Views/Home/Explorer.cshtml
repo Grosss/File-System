@@ -1,0 +1,52 @@
+﻿@model PL.Models.ExplorerModel
+@{
+    ViewBag.Title = "Explorer";
+    var uriPath = (string)HttpContext.Current.Request.RequestContext.RouteData.Values["path"];
+    Uri uri = Request.Url;
+}
+@Scripts.Render("~/bundles/custom")
+
+<input type="hidden" id="uriDrive" value="@HttpContext.Current.Request.RequestContext.RouteData.Values["driveName"]" />
+<input type="hidden" id="uriPath" value="@HttpContext.Current.Request.RequestContext.RouteData.Values["path"]" />
+<div class="row">
+    <div class="col-md-12">
+        @if (uri.AbsolutePath.ToLower() != "/home/explorer/")
+        {
+            <a title="Back" class="glyphicon glyphicon-arrow-left"
+               href="@uri.AbsoluteUri.Remove(uri.AbsoluteUri.Length - uri.Segments.Last().Length)">
+            </a>
+            <img src="~/Content/generic-folder.ico" alt="Folder icon" align="top" style="width: 20px; height: 20px; border: none" />
+            @uriPath.Replace("/", " > ");
+        }
+        else
+        {
+            <img src="~/Content/generic-folder.ico" alt="Folder icon" align="top" style="width: 20px; height: 20px; border: none" />
+        }
+    </div>
+    @if (User.IsInRole("admin"))
+    {
+        <div class="col-md-offset-2 col-md-2">
+            @Html.Action("CreateFolder", "Home", new { })
+        </div>
+        <div class="col-md-2">
+            @Html.Action("UploadFile", "Home", new { })
+        </div>
+        <div class="col-md-2">
+            <button id="deleteButton" class="btn btn-danger">Remove</button>
+        </div>
+    }
+</div>
+
+<table class="table table-hover" style="border: none">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Date modified</th>
+            <th>Type</th>
+            <th>Size</th>
+        </tr>
+    </thead>
+    <tbody id="explorerTable">
+        @Html.Action("GetDirectories", "Home", new { path = uriPath })
+    </tbody>
+</table>

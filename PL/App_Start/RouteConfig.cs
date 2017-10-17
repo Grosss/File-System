@@ -17,13 +17,13 @@ namespace PL
 			//routes.MapRoute(
 			//	name: "Default",
 			//	url: "{controller}/{action}/{drive}/{*path}",
-			//	defaults: new { controller = "Home", action = "Index", drive = UrlParameter.Optional, path = UrlParameter.Optional }
+			//	defaults: new { controller = "Home", action = "Explorer", drive = UrlParameter.Optional, path = UrlParameter.Optional }
 			//);
 
 			routes.MapRoute(
 				name: "Default",
 				url: "{controller}/{action}/{*path}",
-				defaults: new { controller = "Home", action = "Index", path = UrlParameter.Optional }
+				defaults: new { controller = "Home", action = "Explorer", path = UrlParameter.Optional }
 			);
 		}
 	}
