@@ -7,7 +7,7 @@ namespace PL.Models
 {
 	public class ExplorerModel
 	{
-		public IEnumerable<DirModel> Directories;
-		public IEnumerable<FileModel> Files;
+		public IEnumerable<DirectoryViewModel> Directories;
+		public IEnumerable<FileViewModel> Files;
 	}
 }
