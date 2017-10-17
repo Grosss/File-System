@@ -5,16 +5,16 @@ namespace PL.Infrastrucuture.Mappers
 {
 	public static class DirectoryMapper
 	{
-		public static DirModel ToMvcDirectory(this DirectoryEntity directory)
+		public static DirectoryViewModel ToMvcDirectory(this DirectoryEntity directory)
 		{
-			return new DirModel
+			return new DirectoryViewModel
 			{
 				Name = directory.Name,
 				LastAccessTime = directory.LastAccessTime
 			};
 		}
 
-		public static DirectoryEntity ToBllDirectory(this DirModel directory)
+		public static DirectoryEntity ToBllDirectory(this DirectoryViewModel directory)
 		{
 			return new DirectoryEntity
 			{

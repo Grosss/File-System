@@ -5,7 +5,7 @@ using System.Web;
 
 namespace PL.Models
 {
-	public class FileModel
+	public class FileViewModel
 	{
 		public string Name { get; set; }
 		public string FileSizeText { get; set; }

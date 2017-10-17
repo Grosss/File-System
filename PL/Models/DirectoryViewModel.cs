@@ -7,7 +7,7 @@ using System.Web;
 
 namespace PL.Models
 {
-	public class DirModel
+	public class DirectoryViewModel
 	{
 		[Display(Name = "Folder name")]
 		[Required(ErrorMessage = "The field can not be empty!")]
