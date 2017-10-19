@@ -27,7 +27,8 @@
             var jsonObject = {
                 "name": name,
                 "type": type,
-                "path": $("#uriPath").val()
+                "path": $("#uriPath").val(),
+                "driveName": $("#uriDrive").val()
             };
             console.log(JSON.stringify(jsonObject));
             var isConfirmed = confirm("Are you sure?");
@@ -47,7 +48,7 @@
                         $("tr.folder").each(function () {
                             var folderName = $(this).children("td")[0].innerText.trim();
                             console.log($("td.folderName"));
-                            var dblStr = "location.href = '/Home/Explorer/" + $("#uriPath").val() + folderName + "/'";
+                            var dblStr = "location.href = '/Home/Explorer/" + $("#uriDrive").val() + $("#uriPath").val() + folderName + "/'";
                             $(this).attr("ondblclick", dblStr);
                         });
                     },
@@ -112,7 +113,8 @@ function onFileUploadSuccess() {
             var jsonObject = {
                 "name": name,
                 "type": type,
-                "path": $("#uriPath").val()
+                "path": $("#uriPath").val(),
+                "driveName": $("#uriDrive").val()
             };
             console.log(JSON.stringify(jsonObject));
             var isConfirmed = confirm("Are you sure?");
@@ -132,7 +134,7 @@ function onFileUploadSuccess() {
                         $("tr.folder").each(function () {
                             var folderName = $(this).children("td")[0].innerText.trim();
                             console.log($("td.folderName"));
-                            var dblStr = "location.href = '/Home/Explorer/" + $("#uriPath").val() + folderName + "/'";
+                            var dblStr = "location.href = '/Home/Explorer/" + $("#uriDrive").val() + $("#uriPath").val() + folderName + "/'";
                             $(this).attr("ondblclick", dblStr);
                         });
                     },

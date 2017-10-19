@@ -26,6 +26,7 @@
                         <div class="col-md-10">
                             <input id="fileUpload" name="file" type="file" class="" />
                         </div>
+                        @Html.Hidden("uriDrive", ViewContext.RouteData.Values["driveName"])
                         @Html.Hidden("uriPath", ViewContext.RouteData.Values["path"])
                     </div>
 
