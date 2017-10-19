@@ -35,8 +35,8 @@ namespace PL.Controllers
 		    {
 			    Name = drive.Name,
 				VolumeLabel = drive.VolumeLabel,
-				TotalFreeSpace = String.Format("{0} GB", (int) (drive.TotalFreeSpace / Math.Pow(2, 30))),
-				TotalSize = String.Format("{0} GB", (int) (drive.TotalSize / Math.Pow(2, 30)))
+				TotalFreeSpace = string.Format("{0} GB", (int) (drive.TotalFreeSpace / Math.Pow(2, 30))),
+				TotalSize = string.Format("{0} GB", (int) (drive.TotalSize / Math.Pow(2, 30)))
 		    });
 		    return View("Index", drives);
 	    }
