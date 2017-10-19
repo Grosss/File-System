@@ -50,8 +50,7 @@ namespace PL.Controllers
 				return RedirectToAction("Index", "Home");
 			}
 
-			var decodedPath = string.IsNullOrEmpty(path) ? "" : HttpUtility.UrlDecode(path);
-			var uri = new Uri(driveName + ":/" + decodedPath);
+			var uri = new Uri(driveName + ":/" + path);
 			var realPath = uri.LocalPath;
 
 			if (!Request.RawUrl.Contains(RouteData.Values["action"].ToString()))
@@ -70,7 +69,7 @@ namespace PL.Controllers
 
 				return View(explorerModel);
 			}
-			return Content(HttpUtility.UrlDecode(path, Encoding.UTF8) + " is not a valid file or directory. " + RouteData.Values["controller"] + " " + RouteData.Values["action"]
+			return Content(path + " is not a valid file or directory. " + RouteData.Values["controller"] + " " + RouteData.Values["action"]
 				+ " " + RouteData.Values["driveName"] + " " + RouteData.Values["path"]);
 		}
 		
@@ -83,8 +82,7 @@ namespace PL.Controllers
 				return RedirectToAction("Index", "Home");
 			}
 
-			var decodedPath = string.IsNullOrEmpty(path) ? "" : HttpUtility.UrlDecode(path);
-			var uri = new Uri(driveName + ":/" + decodedPath);
+			var uri = new Uri(driveName + ":/" + path);
 			var realPath = uri.LocalPath;
 
 			if (!Request.RawUrl.Contains(RouteData.Values["controller"].ToString()))
@@ -119,8 +117,7 @@ namespace PL.Controllers
 		[ValidateAntiForgeryToken]
 		public ActionResult CreateFolder(DirectoryViewModel directoryModel, string driveName = "", string path = "")
 		{
-			var decodedPath = string.IsNullOrEmpty(path) ? "" : HttpUtility.UrlDecode(path);
-			var uri = new Uri(driveName + ":/" + decodedPath);
+			var uri = new Uri(driveName + ":/" + path);
 			var realPath = uri.LocalPath;
 
 			if (Directory.Exists(realPath + directoryModel.Name))
@@ -158,8 +155,7 @@ namespace PL.Controllers
 
 			if (ModelState.IsValid)
 			{
-				var decodedPath = string.IsNullOrEmpty(uriPath) ? "" : HttpUtility.UrlDecode(uriPath);
-				var uri = new Uri(uriDrive + ":/" + decodedPath);
+				var uri = new Uri(uriDrive + ":/" + uriPath);
 				var folderPath = uri.LocalPath;
 				
 				var realPath = Path.Combine(folderPath, Path.GetFileName(file.FileName));
@@ -179,8 +175,7 @@ namespace PL.Controllers
 			var driveName = jsonObject.DriveName ?? "";
 			var path = jsonObject.Path ?? "";
 
-			var decodedPath = string.IsNullOrEmpty(path) ? "" : HttpUtility.UrlDecode(path);
-			var uri = new Uri(driveName + ":/" + decodedPath);
+			var uri = new Uri(driveName + ":/" + path);
 			var realPath = uri.LocalPath;
 
 			if (type.ToLower().Contains("folder"))
