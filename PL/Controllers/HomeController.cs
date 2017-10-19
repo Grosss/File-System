@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.WebPages;
@@ -30,7 +31,7 @@ namespace PL.Controllers
 	    public ActionResult Index()
 	    {
 		    ViewBag.HostName = Environment.MachineName;
-		    var drives = DriveInfo.GetDrives().Select(drive => new DriveViewModel
+		    var drives = DriveInfo.GetDrives().Where(drive => drive.IsReady).Select(drive => new DriveViewModel
 		    {
 			    Name = drive.Name,
 				VolumeLabel = drive.VolumeLabel,
@@ -39,45 +40,52 @@ namespace PL.Controllers
 		    });
 		    return View("Index", drives);
 	    }
-		
+
 		[Authorize]
 		[HttpGet]
-        public ActionResult Explorer(string path = "")
+		public ActionResult Explorer(string driveName = "", string path = "")
 		{
-			var realPath = Server.MapPath(RootDirectory + path);
-			
-	        if (!Request.RawUrl.Contains(RouteData.Values["action"].ToString()))
-	        {
-				Response.Redirect("/Home/Explorer/");
-	        }
+			if (string.IsNullOrEmpty(driveName))
+			{
+				return RedirectToAction("Index", "Home");
+			}
 
-	        if (Directory.Exists(realPath))
-	        {
+			var decodedPath = string.IsNullOrEmpty(path) ? "" : HttpUtility.UrlDecode(path);
+			var uri = new Uri(driveName + ":/" + decodedPath);
+			var realPath = uri.LocalPath;
+
+			if (!Request.RawUrl.Contains(RouteData.Values["action"].ToString()))
+			{
+				Response.Redirect("/Home/Explorer/");
+			}
+
+			if (Directory.Exists(realPath))
+			{
 				if (Request.RawUrl.Last() != '/')
 				{
 					Response.Redirect("/Home/Explorer/" + path + "/");
 				}
 
-				var dirListModel = directoryService.GetAllDirectories(realPath).Select(d => d.ToMvcDirectory());
-		        var fileListModel = fileService.GetAllFiles(realPath).Select(f => f.ToMvcFile());
-				
-		        var explorerModel = new ExplorerModel
-		        {
-					Directories = dirListModel,
-			        Files = fileListModel
-		        };
+				var explorerModel = GetExplorerModel(realPath);
 
-		        return View(explorerModel);
-	        }
-			return Content(path + " is not a valid file or directory. " + RouteData.Values["controller"] + " " + RouteData.Values["action"]
-				+ " " + RouteData.Values["path"]);
-        }
-
+				return View(explorerModel);
+			}
+			return Content(HttpUtility.UrlDecode(path, Encoding.UTF8) + " is not a valid file or directory. " + RouteData.Values["controller"] + " " + RouteData.Values["action"]
+				+ " " + RouteData.Values["driveName"] + " " + RouteData.Values["path"]);
+		}
+		
 		[Authorize]
 		[ChildActionOnly]
-		public ActionResult GetDirectories(string path = "")
+		public ActionResult GetDirectories(string driveName = "", string path = "")
 		{
-			var realPath = Server.MapPath(RootDirectory + (path));
+			if (string.IsNullOrEmpty(driveName))
+			{
+				return RedirectToAction("Index", "Home");
+			}
+
+			var decodedPath = string.IsNullOrEmpty(path) ? "" : HttpUtility.UrlDecode(path);
+			var uri = new Uri(driveName + ":/" + decodedPath);
+			var realPath = uri.LocalPath;
 
 			if (!Request.RawUrl.Contains(RouteData.Values["controller"].ToString()))
 			{
@@ -91,22 +99,15 @@ namespace PL.Controllers
 					Response.Redirect("/Home/Explorer/" + path + "/");
 				}
 
-				var dirListModel = directoryService.GetAllDirectories(realPath).Select(d => d.ToMvcDirectory());
-				var fileListModel = fileService.GetAllFiles(realPath).Select(f => f.ToMvcFile());
-
-				var explorerModel = new ExplorerModel
-				{
-					Directories = dirListModel,
-					Files = fileListModel
-				};
+				var explorerModel = GetExplorerModel(realPath);
 
 				return PartialView("_GetDirectories", explorerModel);
 			}
 			return Content(path + "ZZZ is not a valid file or directory. ZZZ " + RouteData.Values["controller"] + " " + RouteData.Values["action"]
-				+ " " + RouteData.Values["path"]);
+				+ " " + RouteData.Values["driveName"] + " " + RouteData.Values["path"]);
 		}
-
-		[Authorize(Roles = "admin")]
+		
+	    [Authorize(Roles = "admin")]
 		[HttpGet]
 		public ActionResult CreateFolder()
 		{
@@ -116,9 +117,11 @@ namespace PL.Controllers
 		[Authorize(Roles = "admin")]
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public ActionResult CreateFolder(DirectoryViewModel directoryModel, string path = "")
+		public ActionResult CreateFolder(DirectoryViewModel directoryModel, string driveName = "", string path = "")
 		{
-			var realPath = Server.MapPath(RootDirectory + path);
+			var decodedPath = string.IsNullOrEmpty(path) ? "" : HttpUtility.UrlDecode(path);
+			var uri = new Uri(driveName + ":/" + decodedPath);
+			var realPath = uri.LocalPath;
 
 			if (Directory.Exists(realPath + directoryModel.Name))
 			{
@@ -130,13 +133,7 @@ namespace PL.Controllers
 			{
 				directoryService.CreateDirectory(realPath + directoryModel.Name);
 
-				var dirListModel = directoryService.GetAllDirectories(realPath).Select(d => d.ToMvcDirectory());
-				var fileListModel = fileService.GetAllFiles(realPath).Select(f => f.ToMvcFile());
-				var explorerModel = new ExplorerModel
-				{
-					Directories = dirListModel,
-					Files = fileListModel
-				};
+				var explorerModel = GetExplorerModel(realPath);
 				return PartialView("_GetDirectories", explorerModel);
 			}
 			return PartialView(directoryModel);
@@ -152,7 +149,7 @@ namespace PL.Controllers
 		[Authorize(Roles = "admin")]
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public ActionResult UploadFile(HttpPostedFileBase file, string uriPath = "")
+		public ActionResult UploadFile(HttpPostedFileBase file, string uriDrive = "", string uriPath = "")
 		{
 			if (file == null)
 			{
@@ -161,12 +158,14 @@ namespace PL.Controllers
 
 			if (ModelState.IsValid)
 			{
-				var folderPath = Server.MapPath(RootDirectory + uriPath);
+				var decodedPath = string.IsNullOrEmpty(uriPath) ? "" : HttpUtility.UrlDecode(uriPath);
+				var uri = new Uri(uriDrive + ":/" + decodedPath);
+				var folderPath = uri.LocalPath;
 				
 				var realPath = Path.Combine(folderPath, Path.GetFileName(file.FileName));
 				file.SaveAs(realPath);
 
-				return RedirectToAction("Explorer", "Home", new { path = uriPath });
+				return RedirectToAction("Explorer", "Home", new { driveName = uriDrive, path = uriPath });
 			}
 			return PartialView();
 		}
@@ -177,8 +176,12 @@ namespace PL.Controllers
 		{
 			var name = jsonObject.Name;
 			var type = jsonObject.Type;
+			var driveName = jsonObject.DriveName ?? "";
 			var path = jsonObject.Path ?? "";
-			var realPath = Server.MapPath(RootDirectory + path);
+
+			var decodedPath = string.IsNullOrEmpty(path) ? "" : HttpUtility.UrlDecode(path);
+			var uri = new Uri(driveName + ":/" + decodedPath);
+			var realPath = uri.LocalPath;
 
 			if (type.ToLower().Contains("folder"))
 			{
@@ -189,14 +192,22 @@ namespace PL.Controllers
 				fileService.DeleteFile(realPath + name);
 			}
 
+			var explorerModel = GetExplorerModel(realPath);
+
+			return PartialView("_GetDirectories", explorerModel);
+		}
+
+		private ExplorerModel GetExplorerModel(string realPath)
+		{
 			var dirListModel = directoryService.GetAllDirectories(realPath).Select(d => d.ToMvcDirectory());
 			var fileListModel = fileService.GetAllFiles(realPath).Select(f => f.ToMvcFile());
+
 			var explorerModel = new ExplorerModel
 			{
 				Directories = dirListModel,
 				Files = fileListModel
 			};
-			return PartialView("_GetDirectories", explorerModel);
+			return explorerModel;
 		}
     }
 }
