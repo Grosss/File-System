@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.Http.Results;
 using System.Web.Mvc;
 using BLL.Interface.Services;
 using PL.Infrastrucuture.Mappers;
@@ -52,7 +53,7 @@ namespace PL.Controllers
 
 			if (user.Login == User.Identity.Name)
 			{
-				return View("Error");
+				return RedirectToAction("BadRequest", "Error");
 			}
 
 			if (user.Roles.Contains(roleName))

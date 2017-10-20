@@ -23,7 +23,6 @@
                     ))
             {
                 <div class="modal-body">
-
                     @Html.AntiForgeryToken()
 
                     <br />
@@ -33,9 +32,8 @@
                         @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
                         @Html.ValidationMessageFor(m => m.Name, null, new { @class = "text-danger" })
                     </div>
+                    @Html.Hidden("driveName", ViewContext.RouteData.Values["driveName"])
                     @Html.Hidden("path", ViewContext.RouteData.Values["path"])
-
-
                 </div>
                 <div class="divider">
                     <div class="form-group">

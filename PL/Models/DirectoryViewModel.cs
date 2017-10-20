@@ -11,7 +11,7 @@ namespace PL.Models
 	{
 		[Display(Name = "Folder name")]
 		[Required(ErrorMessage = "The field can not be empty!")]
-		[RegularExpression("^[^\\\\/?%*:|\"<>]+$", ErrorMessage = "Invalid folder name")]
+		[RegularExpression("^[^\\\\/?*:|\"<>]+$", ErrorMessage = "Invalid folder name")]
 		public string Name { get; set; }
 		public DateTime LastAccessTime { get; set; }
 	}
