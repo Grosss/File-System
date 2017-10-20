@@ -19,13 +19,13 @@ namespace DAL.Concrete
 
 		public IEnumerable<DalRole> GetAll()
 		{
-			return context.Set<Role>().ToList().Select(r => r.ToDalRole());
+			return context.Set<Role>().Select(r => r.ToDalRole());
 		}
 
 		public DalRole GetById(int id)
 		{
-			return context.Set<Role>().FirstOrDefault(r => r.RoleId == id) != null 
-				? context.Set<Role>().FirstOrDefault(r => r.RoleId == id).ToDalRole() 
+			return context.Set<Role>().FirstOrDefault(r => r.RoleId == id) != null
+				? context.Set<Role>().FirstOrDefault(r => r.RoleId == id).ToDalRole()
 				: null;
 		}
 
@@ -59,7 +59,7 @@ namespace DAL.Concrete
 			var user = context.Set<User>().FirstOrDefault(u => u.UserId == userId);
 			if (user != null && role != null)
 			{
-				user.Roles.Add(role);	
+				user.Roles.Add(role);
 			}
 		}
 

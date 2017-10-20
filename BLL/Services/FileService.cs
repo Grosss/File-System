@@ -18,8 +18,7 @@ namespace BLL.Services
 					FileSizeText = (fileInfo.Length < 1024) ? fileInfo.Length.ToString() + " B" : fileInfo.Length / 1024 + " KB",
 					Extension = fileInfo.Extension,
 					LastAccessTime = fileInfo.LastAccessTime
-				})
-				.ToList();
+				});
 		}
 
 		public FileEntity GetFile(int id)

@@ -15,9 +15,9 @@ namespace BLL.Services
 				.Select(directoryName => new DirectoryInfo(directoryName))
 				.Select(directoryInfo => new DirectoryEntity
 				{
-					Name = directoryInfo.Name, LastAccessTime = directoryInfo.LastAccessTime
-				})
-				.ToList();
+					Name = directoryInfo.Name,
+					LastAccessTime = directoryInfo.LastAccessTime
+				});
 		}
 
 		public DirectoryEntity GetDirectory(int id)
