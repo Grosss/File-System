@@ -4,6 +4,10 @@
         var name = "";
         var type = "";
 
+        if ($("#closeButton").length) {
+            $("#closeButton").remove();
+        }
+
         var closeBtn = $('<button>Close Search</button>').attr({
             id: "closeButton",
             value: "Close search"
