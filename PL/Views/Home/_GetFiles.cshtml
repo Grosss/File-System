@@ -1,0 +1,16 @@
+﻿@model IEnumerable<PL.Models.FileViewModel>
+
+@foreach (var file in Model)
+{
+    <tr class="file">
+        <td class="fileName">
+            @file.Name
+        </td>
+        <td>@file.LastAccessTime</td>
+        <td>@file.Extension.ToUpper().Replace(".", "") File</td>
+        <td>@file.FileSizeText</td>
+    </tr>
+}
+<div class="col-md-12">
+    <button id="closeSearchResult" class="btn btn-danger">Close</button>
+</div>

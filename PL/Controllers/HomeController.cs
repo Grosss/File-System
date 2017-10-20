@@ -6,6 +6,7 @@ using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.WebPages;
+using BLL.Interface.Entities;
 using BLL.Interface.Services;
 using Newtonsoft.Json.Linq;
 using PL.Infrastrucuture.Mappers;
@@ -25,6 +26,26 @@ namespace PL.Controllers
 			this.fileService = fileService;
 			this.directoryService = directoryService;
 		}
+
+	    [Authorize]
+	    [HttpPost]
+	    public ActionResult FileSearch(string driveName = "", string path = "", string searchResult = "")
+	    {
+			var uri = new Uri(driveName + ":/" + path);
+			var realPath = uri.LocalPath;
+
+		    try
+		    {
+			    var files = fileService.GetFileInSubdirectories(realPath, searchResult);
+				
+				return PartialView("_GetFiles", files.Select(f => f.ToMvcFile()));
+		    }
+		    catch (ArgumentException e)
+		    {
+			    var explorerModel = GetExplorerModel(realPath);
+			    return PartialView("_GetDirectories", explorerModel);
+		    }
+	    }
 
 	    [Authorize]
 	    [HttpGet]
@@ -74,7 +95,6 @@ namespace PL.Controllers
 		}
 		
 		[Authorize]
-		[ChildActionOnly]
 		public ActionResult GetDirectories(string driveName = "", string path = "")
 		{
 			if (string.IsNullOrEmpty(driveName))
@@ -94,7 +114,7 @@ namespace PL.Controllers
 			{
 				if (Request.RawUrl.Last() != '/')
 				{
-					Response.Redirect("/Home/Explorer/" + path + "/");
+					Response.Redirect("/Home/Explorer/" + driveName + "/" + path + "/");
 				}
 
 				var explorerModel = GetExplorerModel(realPath);
@@ -133,7 +153,7 @@ namespace PL.Controllers
 				var explorerModel = GetExplorerModel(realPath);
 				return PartialView("_GetDirectories", explorerModel);
 			}
-			return PartialView(directoryModel);
+			return PartialView("_CreateFolder", directoryModel);
 		}
 
 		[Authorize(Roles = "admin")]
@@ -163,7 +183,7 @@ namespace PL.Controllers
 
 				return RedirectToAction("Explorer", "Home", new { driveName = uriDrive, path = uriPath });
 			}
-			return PartialView();
+			return PartialView("_UploadFile");
 		}
 		
 		[HttpPost]
