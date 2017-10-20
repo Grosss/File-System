@@ -19,7 +19,7 @@ namespace DAL.Concrete
 
 		public IEnumerable<DalRole> GetAll()
 		{
-			return context.Set<Role>().Select(r => r.ToDalRole());
+			return context.Set<Role>().ToList().Select(r => r.ToDalRole());
 		}
 
 		public DalRole GetById(int id)

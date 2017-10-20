@@ -20,7 +20,7 @@ namespace DAL.Concrete
 
 		public IEnumerable<DalUser> GetAll()
 		{
-			return context.Set<User>().Select(user => user.ToDalUser());
+			return context.Set<User>().ToList().Select(user => user.ToDalUser());
 		}
 
 		public DalUser GetById(int id)
