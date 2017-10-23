@@ -16,15 +16,11 @@
         $("#buttons").append(closeBtn);
 
         $("#closeButton").click(function () {
-            console.log(name + " " + type);
             var jsonObject = {
                 "path": $("#uriPath").val(),
                 "driveName": $("#uriDrive").val()
             };
-            console.log(JSON.stringify(jsonObject));
-            console.log($("#uriDrive").val());
             var urlToPass = "/Home/GetDirectories/" + $("#uriDrive").val() + "/" + $("#uriPath").val();
-            console.log(urlToPass);
             var isConfirmed = confirm("Are you sure?");
             if (isConfirmed === true) {
                 $.ajax({
@@ -41,7 +37,6 @@
 
                         $("tr.folder").each(function () {
                             var folderName = $(this).children("td")[0].innerText.trim();
-                            console.log($("td.folderName"));
                             var dblStr = "location.href = '/Home/Explorer/" + $("#uriDrive").val() + $("#uriPath").val() + folderName + "/'";
                             $(this).attr("ondblclick", dblStr);
                         });
@@ -68,14 +63,12 @@
                         }
                     });
                     $("#deleteButton").click(function () {
-                        console.log(name + " " + type);
                         var jsonObject = {
                             "name": name,
                             "type": type,
                             "path": $("#uriPath").val(),
                             "driveName": $("#uriDrive").val()
                         };
-                        console.log(JSON.stringify(jsonObject));
                         var isConfirmed = confirm("Are you sure?");
                         if (isConfirmed === true) {
                             $.ajax({
@@ -92,7 +85,6 @@
 
                                     $("tr.folder").each(function () {
                                         var folderName = $(this).children("td")[0].innerText.trim();
-                                        console.log($("td.folderName"));
                                         var dblStr = "location.href = '/Home/Explorer/" + $("#uriDrive").val() + $("#uriPath").val() + folderName + "/'";
                                         $(this).attr("ondblclick", dblStr);
                                     });
@@ -113,7 +105,6 @@
                                         $("#deleteButton").prop("disabled", false);
                                         $(this).addClass("chosen");
                                         var tds = $(this).children("td");
-                                        console.log(tds[0]);
                                         name = tds[0].innerText.trim();
                                         type = tds[2].innerText;
                                     }
@@ -154,14 +145,12 @@ function onFolderCreateSuccess() {
 
 
         $("#deleteButton").click(function () {
-            console.log(name + " " + type);
             var jsonObject = {
                 "name": name,
                 "type": type,
                 "path": $("#uriPath").val(),
                 "driveName": $("#uriDrive").val()
             };
-            console.log(JSON.stringify(jsonObject));
             var isConfirmed = confirm("Are you sure?");
             if (isConfirmed === true) {
                 $.ajax({
@@ -178,7 +167,6 @@ function onFolderCreateSuccess() {
 
                         $("tr.folder").each(function () {
                             var folderName = $(this).children("td")[0].innerText.trim();
-                            console.log($("td.folderName"));
                             var dblStr = "location.href = '/Home/Explorer/" + $("#uriDrive").val() + $("#uriPath").val() + folderName + "/'";
                             $(this).attr("ondblclick", dblStr);
                         });
@@ -199,7 +187,6 @@ function onFolderCreateSuccess() {
                             $("#deleteButton").prop("disabled", false);
                             $(this).addClass("chosen");
                             var tds = $(this).children("td");
-                            console.log(tds[0]);
                             name = tds[0].innerText.trim();
                             type = tds[2].innerText;
                         }
@@ -217,6 +204,97 @@ function onFileUploadSuccess() {
 (function () {
 
     $(document).ready(function () {
+        function orderBy(a, b, isNumb) {
+            if (isNumb) return parseInt(a) - parseInt(b);
+            if (a < b) return -1;
+            if (a > b) return 1;
+            return 0;
+        }
+
+        function sortTable(columnHeader, isDesc) {
+            var isDate = columnHeader.hasClass('dateModified');
+            var column = columnHeader.index();
+            var table = columnHeader.closest('table');
+            var isNum = columnHeader.hasClass('fileSize');
+            var rows;
+            if (!isDesc) {
+                rows = table.find('tbody > tr.folder').get();
+                rows.sort(function (rowA, rowB) {
+                    var keyA;
+                    var keyB;
+                    if (isDate) {
+                        keyA = new Date($(rowA).children('td').eq(column).text().toUpperCase());
+                        keyB = new Date($(rowB).children('td').eq(column).text().toUpperCase());
+                    } else {
+                        keyA = $(rowA).children('td').eq(column).text().toUpperCase();
+                        keyB = $(rowB).children('td').eq(column).text().toUpperCase();
+                    }
+                    return orderBy(keyA, keyB, isNum);
+                });
+                $.each(rows, function (index, row) {
+                    table.children('tbody').append(row);
+                });
+
+                rows = table.find('tbody > tr.file').get();
+                rows.sort(function (rowA, rowB) {
+                    var keyA;
+                    var keyB;
+                    if (isDate) {
+                        keyA = new Date($(rowA).children('td').eq(column).text().toUpperCase());
+                        keyB = new Date($(rowB).children('td').eq(column).text().toUpperCase());
+                    } else {
+                        keyA = $(rowA).children('td').eq(column).text().toUpperCase();
+                        keyB = $(rowB).children('td').eq(column).text().toUpperCase();
+                    }
+                    return orderBy(keyA, keyB, isNum);
+                });
+                $.each(rows, function (index, row) {
+                    table.children('tbody').append(row);
+                });
+            } else {
+                rows = table.find('tbody > tr.file').get();
+                rows.sort(function (rowA, rowB) {
+                    var keyA;
+                    var keyB;
+                    if (isDate) {
+                        keyA = new Date($(rowA).children('td').eq(column).text().toUpperCase());
+                        keyB = new Date($(rowB).children('td').eq(column).text().toUpperCase());
+                    } else {
+                        keyA = $(rowA).children('td').eq(column).text().toUpperCase();
+                        keyB = $(rowB).children('td').eq(column).text().toUpperCase();
+                    }
+                    return orderBy(keyB, keyA, isNum);
+                });
+                $.each(rows, function (index, row) {
+                    table.children('tbody').append(row);
+                });
+
+                rows = table.find('tbody > tr.folder').get();
+                rows.sort(function (rowA, rowB) {
+                    var keyA;
+                    var keyB;
+                    if (isDate) {
+                        keyA = new Date($(rowA).children('td').eq(column).text().toUpperCase());
+                        keyB = new Date($(rowB).children('td').eq(column).text().toUpperCase());
+                    } else {
+                        keyA = $(rowA).children('td').eq(column).text().toUpperCase();
+                        keyB = $(rowB).children('td').eq(column).text().toUpperCase();
+                    }
+                    return orderBy(keyB, keyA, isNum);
+                });
+                $.each(rows, function (index, row) {
+                    table.children('tbody').append(row);
+                });
+            }
+        }
+
+        $('th').click(function () {
+            var selectedHeader = $(this).closest('th');
+            selectedHeader.toggleClass('desc');
+            var isDesc = selectedHeader.hasClass("desc");
+            sortTable(selectedHeader, isDesc);
+        });
+
         var name = "";
         var type = "";
 
@@ -237,14 +315,12 @@ function onFileUploadSuccess() {
         });
 
         $("#deleteButton").click(function () {
-            console.log(name + " " + type);
             var jsonObject = {
                 "name": name,
                 "type": type,
                 "path": $("#uriPath").val(),
                 "driveName": $("#uriDrive").val()
             };
-            console.log(JSON.stringify(jsonObject));
             var isConfirmed = confirm("Are you sure?");
             if (isConfirmed === true) {
                 $.ajax({
@@ -261,7 +337,6 @@ function onFileUploadSuccess() {
 
                         $("tr.folder").each(function () {
                             var folderName = $(this).children("td")[0].innerText.trim();
-                            console.log($("td.folderName"));
                             var dblStr = "location.href = '/Home/Explorer/" + $("#uriDrive").val() + $("#uriPath").val() + folderName + "/'";
                             $(this).attr("ondblclick", dblStr);
                         });
@@ -282,7 +357,6 @@ function onFileUploadSuccess() {
                             $("#deleteButton").prop("disabled", false);
                             $(this).addClass("chosen");
                             var tds = $(this).children("td");
-                            console.log(tds[0]);
                             name = tds[0].innerText.trim();
                             type = tds[2].innerText;
                         }
