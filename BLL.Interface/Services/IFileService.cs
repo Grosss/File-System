@@ -6,8 +6,7 @@ namespace BLL.Interface.Services
 	public interface IFileService
 	{
 		IEnumerable<FileEntity> GetAllFiles(string path);
-		IEnumerable<FileEntity> GetFileInSubdirectories(string path, string searchPattern);
-		FileEntity GetFile(int id);
+		IEnumerable<FileEntity> GetFilesInSubdirectories(string path, string searchPattern);
 		void DeleteFile(string path);
 	}
 }

@@ -23,9 +23,10 @@ namespace DAL.Concrete
 		}
 
 		public DalUser GetById(int id)
-        {
-            return context.Set<User>().FirstOrDefault(u => u.UserId == id) != null 
-				? context.Set<User>().FirstOrDefault(u => u.UserId == id).ToDalUser() 
+		{
+			User user = context.Set<User>().SingleOrDefault(u => u.UserId == id);
+            return user != null 
+				? user.ToDalUser() 
 				: null;
         }
 
@@ -36,7 +37,7 @@ namespace DAL.Concrete
 
 		public void Delete(DalUser entity)
 		{
-			var user = context.Set<User>().FirstOrDefault(u => u.UserId == entity.Id);
+			User user = context.Set<User>().SingleOrDefault(u => u.UserId == entity.Id);
 			if (user != null)
 			{
 				context.Set<User>().Remove(user);
@@ -45,7 +46,7 @@ namespace DAL.Concrete
 
 		public void Update(DalUser entity)
 		{
-			var user = context.Set<User>().FirstOrDefault(u => u.UserId == entity.Id);
+			User user = context.Set<User>().SingleOrDefault(u => u.UserId == entity.Id);
 			if (user != null)
 			{
 				user.UserId = entity.Id;
@@ -57,7 +58,7 @@ namespace DAL.Concrete
 
 		public DalUser GetUserByEmail(string email)
 		{
-			var user = context.Set<User>().FirstOrDefault(u =>
+			User user = context.Set<User>().SingleOrDefault(u =>
 				u.Email.ToLower() == email.ToLower());
 			return user != null
 				? user.ToDalUser()
@@ -66,7 +67,7 @@ namespace DAL.Concrete
 
 		public DalUser GetUserByLogin(string login)
         {
-			var user = context.Set<User>().FirstOrDefault(u =>
+			User user = context.Set<User>().SingleOrDefault(u =>
 				u.Login.ToLower() == login.ToLower());
 			return user != null
 				? user.ToDalUser()

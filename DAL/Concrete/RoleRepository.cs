@@ -24,8 +24,9 @@ namespace DAL.Concrete
 
 		public DalRole GetById(int id)
 		{
-			return context.Set<Role>().FirstOrDefault(r => r.RoleId == id) != null
-				? context.Set<Role>().FirstOrDefault(r => r.RoleId == id).ToDalRole()
+			Role role = context.Set<Role>().SingleOrDefault(r => r.RoleId == id);
+			return role != null
+				? role.ToDalRole()
 				: null;
 		}
 
@@ -36,7 +37,7 @@ namespace DAL.Concrete
 
 		public void Delete(DalRole entity)
 		{
-			var role = context.Set<Role>().FirstOrDefault(r => r.RoleId == entity.Id);
+			Role role = context.Set<Role>().SingleOrDefault(r => r.RoleId == entity.Id);
 			if (role != null)
 			{
 				context.Set<Role>().Remove(role);
@@ -45,7 +46,7 @@ namespace DAL.Concrete
 
 		public void Update(DalRole entity)
 		{
-			var role = context.Set<Role>().FirstOrDefault(r => r.RoleId == entity.Id);
+			Role role = context.Set<Role>().SingleOrDefault(r => r.RoleId == entity.Id);
 			if (role != null)
 			{
 				role.RoleId = entity.Id;
@@ -55,8 +56,8 @@ namespace DAL.Concrete
 
 		public void AddRoleToUser(int userId, int roleId)
 		{
-			var role = context.Set<Role>().FirstOrDefault(r => r.RoleId == roleId);
-			var user = context.Set<User>().FirstOrDefault(u => u.UserId == userId);
+			Role role = context.Set<Role>().SingleOrDefault(r => r.RoleId == roleId);
+			User user = context.Set<User>().SingleOrDefault(u => u.UserId == userId);
 			if (user != null && role != null)
 			{
 				user.Roles.Add(role);
@@ -65,8 +66,8 @@ namespace DAL.Concrete
 
 		public void RemoveRoleFromUser(int userId, int roleId)
 		{
-			var role = context.Set<Role>().FirstOrDefault(r => r.RoleId == roleId);
-			var user = context.Set<User>().FirstOrDefault(u => u.UserId == userId);
+			Role role = context.Set<Role>().SingleOrDefault(r => r.RoleId == roleId);
+			User user = context.Set<User>().SingleOrDefault(u => u.UserId == userId);
 			if (user != null && role != null)
 			{
 				user.Roles.Remove(role);
@@ -75,7 +76,7 @@ namespace DAL.Concrete
 
 		public IEnumerable<DalRole> GetUserRoles(int userId)
 		{
-			var user = context.Set<User>().FirstOrDefault(u => u.UserId == userId);
+			User user = context.Set<User>().SingleOrDefault(u => u.UserId == userId);
 			return user != null 
 				? user.Roles.Select(r => r.ToDalRole()) 
 				: null;

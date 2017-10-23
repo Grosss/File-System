@@ -22,7 +22,7 @@ namespace BLL.Services
 				});
 		}
 		
-		public IEnumerable<FileEntity> GetFileInSubdirectories(string path, string searchPattern)
+		public IEnumerable<FileEntity> GetFilesInSubdirectories(string path, string searchPattern)
 		{
 			return GetFileList(path, searchPattern)
 				.Select(fileName => new FileInfo(fileName))
@@ -35,11 +35,6 @@ namespace BLL.Services
 				});
 		}
 
-		public FileEntity GetFile(int id)
-		{
-			throw new System.NotImplementedException();
-		}
-
 		public void DeleteFile(string path)
 		{
 			if (File.Exists(path))
@@ -47,6 +42,8 @@ namespace BLL.Services
 				File.Delete(path);
 			}
 		}
+
+		#region private methods
 
 		private static IEnumerable<string> GetFileList(string rootFolderPath, string fileSearchPattern)
 		{
@@ -64,16 +61,18 @@ namespace BLL.Services
 				{
 					continue;
 				}
-				foreach (var t in tmp)
+				foreach (string t in tmp)
 				{
 					yield return t;
 				}
 				tmp = Directory.GetDirectories(rootFolderPath);
-				foreach (var t in tmp)
+				foreach (string t in tmp)
 				{
 					pending.Enqueue(t);
 				}
 			}
 		}
+
+		#endregion
 	}
 }
