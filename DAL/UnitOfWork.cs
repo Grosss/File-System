@@ -19,13 +19,5 @@ namespace DAL
 				Context.SaveChanges();
 			}
 		}
-		
-		public void Dispose()
-		{
-			if (Context != null)
-			{
-				Context.Dispose();
-			}
-		}
 	}
 }

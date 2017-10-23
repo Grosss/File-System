@@ -2,7 +2,7 @@
 
 namespace DAL.Interface
 {
-	public interface IUnitOfWork : IDisposable
+	public interface IUnitOfWork
 	{
 		void Commit();
 	}
