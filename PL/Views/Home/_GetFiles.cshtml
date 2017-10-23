@@ -1,6 +1,7 @@
-﻿@model IEnumerable<PL.Models.FileViewModel>
+﻿@using PL.Models
+@model IEnumerable<FileViewModel>
 
-@foreach (var file in Model)
+@foreach (FileViewModel file in Model)
 {
     <tr class="file">
         <td class="fileName">

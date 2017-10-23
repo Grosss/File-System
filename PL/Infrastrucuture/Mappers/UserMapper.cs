@@ -9,7 +9,7 @@ namespace PL.Infrastrucuture.Mappers
 	{
 		public static UserViewModel ToMvcUser(this UserEntity user, IRoleService roleService)
 		{
-			var mvcUser = new UserViewModel
+			UserViewModel mvcUser = new UserViewModel
 			{
 				Id = user.Id,
 				Email = user.Email,
@@ -22,7 +22,7 @@ namespace PL.Infrastrucuture.Mappers
 
 		public static UserEntity ToBllUser(this UserViewModel user, IUserService userService)
 		{
-			var bllUser = new UserEntity
+			UserEntity bllUser = new UserEntity
 			{
 				Id = user.Id,
 				Email = user.Email,

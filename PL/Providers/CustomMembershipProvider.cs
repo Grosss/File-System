@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Linq;
 using System.Web.Helpers;
+using System.Web.Providers.Entities;
 using System.Web.Security;
 using BLL.Interface.Entities;
 using BLL.Interface.Services;
+using RoleEntity = BLL.Interface.Entities.RoleEntity;
 
 namespace PL.Providers
 {
@@ -25,7 +27,7 @@ namespace PL.Providers
             if (membershipUser != null)
                 return null;
 
-            var user = new UserEntity
+			UserEntity user = new UserEntity
             {
                 Email = email,
                 Login = login,
@@ -33,7 +35,7 @@ namespace PL.Providers
             };
             
             UserService.CreateUser(user);
-	        var userRole = RoleService.GetAllRoles().SingleOrDefault(r => r.Name == "user");
+	        RoleEntity userRole = RoleService.GetAllRoles().SingleOrDefault(r => r.Name == "user");
 	        if (userRole != null)
 			{ 
 		        RoleService.AddRoleToUser(UserService.GetUserByLogin(user.Login).Id, 
@@ -45,12 +47,12 @@ namespace PL.Providers
 
         public override MembershipUser GetUser(string login, bool userIsOnline)
         {
-            var user = UserService.GetUserByLogin(login);
+            UserEntity user = UserService.GetUserByLogin(login);
 
             if (user == null)
                 return null;
 
-            var memberUser = new MembershipUser("CustomMembershipProvider", user.Login,
+			MembershipUser memberUser = new MembershipUser("CustomMembershipProvider", user.Login,
                 null, user.Email, null, null,
                 false, false, DateTime.Now,
                 DateTime.MinValue, DateTime.MinValue,
@@ -61,7 +63,7 @@ namespace PL.Providers
 
         public override bool ValidateUser(string login, string password)
         {
-	        var user = UserService.GetUserByLogin(login);
+	        UserEntity user = UserService.GetUserByLogin(login);
 
 	        return user != null && Crypto.VerifyHashedPassword(user.Password, password);
         }

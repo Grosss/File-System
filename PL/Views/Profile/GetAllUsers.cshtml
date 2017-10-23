@@ -17,13 +17,13 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var user in Model)
+                @foreach (UserViewModel user in Model)
                 {
                     <tr id="row@(user.Id)">
                         <td>@user.Login</td>
                         <td>@user.Email</td>
                         <td>
-                            @foreach (var role in user.Roles)
+                            @foreach (string role in user.Roles)
                             {
                                 <div>@role</div>
                             }

@@ -13,7 +13,7 @@ namespace PL.App_Start
         #region Unity Container
         private static Lazy<IUnityContainer> container = new Lazy<IUnityContainer>(() =>
         {
-            var container = new UnityContainer();
+			UnityContainer container = new UnityContainer();
             RegisterTypes(container);
             return container;
         });

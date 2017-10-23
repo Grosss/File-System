@@ -3,7 +3,7 @@
 <td>@Model.Login</td>
 <td>@Model.Email</td>
 <td>
-    @foreach (var role in Model.Roles)
+    @foreach (string role in Model.Roles)
     {
         <div>@role</div>
     }

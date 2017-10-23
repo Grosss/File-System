@@ -19,7 +19,7 @@ namespace PL.Providers
 		
 		public override bool IsUserInRole(string login, string roleName)
         {
-            var user = UserService.GetUserByLogin(login);
+            UserEntity user = UserService.GetUserByLogin(login);
 
             if (user == null)
                 return false;
@@ -29,7 +29,7 @@ namespace PL.Providers
 
         public override string[] GetRolesForUser(string login)
         {
-            var user = UserService.GetUserByLogin(login);
+            UserEntity user = UserService.GetUserByLogin(login);
 
             if (user == null)
                 return null;           
@@ -41,7 +41,7 @@ namespace PL.Providers
 
         public override void CreateRole(string roleName)
         {
-            var newRole = new RoleEntity() { Name = roleName };
+            RoleEntity newRole = new RoleEntity() { Name = roleName };
             RoleService.CreateRole(newRole);
         }
 

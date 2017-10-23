@@ -1,6 +1,7 @@
-﻿@model PL.Models.ExplorerModel
+﻿@using PL.Models
+@model ExplorerModel
 
-@foreach (var dir in Model.Directories)
+@foreach (DirectoryViewModel dir in Model.Directories)
 {
     <tr class="folder" ondblclick="location.href = '@Url.Action("Explorer", "Home", new { driveName = HttpContext.Current.Request.RequestContext.RouteData.Values["driveName"], path = HttpContext.Current.Request.RequestContext.RouteData.Values["path"] + dir.Name + "/" })'">
         <td class="folderName">
@@ -12,7 +13,7 @@
         <td></td>
     </tr>
 }
-@foreach (var file in Model.Files)
+@foreach (FileViewModel file in Model.Files)
 {
     <tr class="file">
         <td class="fileName">

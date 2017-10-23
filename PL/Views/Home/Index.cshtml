@@ -1,10 +1,11 @@
-﻿@model IEnumerable<PL.Models.DriveViewModel>
+﻿@using PL.Models
+@model IEnumerable<DriveViewModel>
 @{
     ViewBag.Title = ViewBag.HostName;
 }
 
 <div class="row">
-        @foreach (var drive in Model)
+        @foreach (DriveViewModel drive in Model)
         {
             <div class="col-md-3" ondblclick="location.href = '@Url.Action("Explorer", "Home", new { driveName = drive.Name.Replace(@":\", "") })'">
                 <div class="col-md-4">
