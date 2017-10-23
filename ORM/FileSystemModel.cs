@@ -11,7 +11,6 @@ namespace ORM
 		public FileSystemContext()
 			: base("name=FileSystem")
 		{
-			//Database.SetInitializer<FileSystemContext>(new DropCreateDatabaseIfModelChanges<FileSystemContext>());
 			Database.SetInitializer<FileSystemContext>(new AuctionDbInitializer());
 		}
 
