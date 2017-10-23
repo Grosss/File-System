@@ -1,5 +1,5 @@
 ﻿function onFileFindSuccess() {
-    $(document).ready(function () {
+    $(document).ready(function() {
         $("#deleteButton").off("click");
         var name = "";
         var type = "";
@@ -15,7 +15,7 @@
         closeBtn.addClass("btn");
         $("#buttons").append(closeBtn);
 
-        $("#closeButton").click(function () {
+        $("#closeButton").click(function() {
             var urlToPass = "/Home/GetDirectories/" + $("#uriDrive").val() + "/" + $("#uriPath").val();
 
             $.ajax({
@@ -24,30 +24,31 @@
                 dataType: "html",
                 data: {},
                 contentType: "application/json; charset=UTF-8",
-                success: function (data) {
+                success: function(data) {
 
                     var target = $("#explorerTable");
                     target.empty();
                     target.append(data);
 
-                    $("tr.folder").each(function () {
+                    $("tr.folder").each(function() {
                         var folderName = $(this).children("td")[0].innerText.trim();
                         var dblStr = "location.href = '/Home/Explorer/" +
                             $("#uriDrive").val() +
+                            "/" +
                             $("#uriPath").val() +
                             folderName +
                             "/'";
                         $(this).attr("ondblclick", dblStr);
                     });
                 },
-                failure: function (errMsg) {
+                failure: function(errMsg) {
                     alert(errMsg);
                 }
-            }).done(function () {
+            }).done(function() {
                 $("#closeButton").remove();
 
                 $("#deleteButton").prop("disabled", true);
-                $("#explorerTable tr").click(function () {
+                $("#explorerTable tr").click(function() {
                     var selected = $(this).hasClass("chosen");
                     $("#explorerTable tr").removeClass("chosen");
                     name = "";
@@ -61,7 +62,7 @@
                         type = tds[2].innerText;
                     }
                 });
-                $("#deleteButton").click(function () {
+                $("#deleteButton").click(function() {
                     var jsonObject = {
                         "name": name,
                         "type": type,
@@ -76,29 +77,30 @@
                             dataType: "html",
                             data: JSON.stringify(jsonObject),
                             contentType: "application/json; charset=UTF-8",
-                            success: function (data) {
+                            success: function(data) {
 
                                 var target = $("#explorerTable");
                                 target.empty();
                                 target.append(data);
 
-                                $("tr.folder").each(function () {
+                                $("tr.folder").each(function() {
                                     var folderName = $(this).children("td")[0].innerText.trim();
                                     var dblStr = "location.href = '/Home/Explorer/" +
                                         $("#uriDrive").val() +
+                                        "/" +
                                         $("#uriPath").val() +
                                         folderName +
                                         "/'";
                                     $(this).attr("ondblclick", dblStr);
                                 });
                             },
-                            failure: function (errMsg) {
+                            failure: function(errMsg) {
                                 alert(errMsg);
                             }
-                        }).done(function () {
+                        }).done(function() {
 
                             $("#deleteButton").prop("disabled", true);
-                            $("#explorerTable tr").click(function () {
+                            $("#explorerTable tr").click(function() {
                                 var selected = $(this).hasClass("chosen");
                                 $("#explorerTable tr").removeClass("chosen");
                                 name = "";
@@ -124,14 +126,14 @@
 function onFolderCreateSuccess() {
     $("#createFolderModal").modal("hide");
 
-    $(document).ready(function () {
+    $(document).ready(function() {
         $("#deleteButton").off("click");
 
         var name = "";
         var type = "";
 
         $("#deleteButton").prop("disabled", true);
-        $("#explorerTable tr").click(function () {
+        $("#explorerTable tr").click(function() {
             var selected = $(this).hasClass("chosen");
             $("#explorerTable tr").removeClass("chosen");
             name = "";
@@ -147,7 +149,7 @@ function onFolderCreateSuccess() {
         });
 
 
-        $("#deleteButton").click(function () {
+        $("#deleteButton").click(function() {
             var jsonObject = {
                 "name": name,
                 "type": type,
@@ -162,29 +164,30 @@ function onFolderCreateSuccess() {
                     dataType: "html",
                     data: JSON.stringify(jsonObject),
                     contentType: "application/json; charset=UTF-8",
-                    success: function (data) {
+                    success: function(data) {
 
                         var target = $("#explorerTable");
                         target.empty();
                         target.append(data);
 
-                        $("tr.folder").each(function () {
+                        $("tr.folder").each(function() {
                             var folderName = $(this).children("td")[0].innerText.trim();
                             var dblStr = "location.href = '/Home/Explorer/" +
                                 $("#uriDrive").val() +
+                                "/" +
                                 $("#uriPath").val() +
                                 folderName +
                                 "/'";
                             $(this).attr("ondblclick", dblStr);
                         });
                     },
-                    failure: function (errMsg) {
+                    failure: function(errMsg) {
                         alert(errMsg);
                     }
-                }).done(function () {
+                }).done(function() {
 
                     $("#deleteButton").prop("disabled", true);
-                    $("#explorerTable tr").click(function () {
+                    $("#explorerTable tr").click(function() {
                         var selected = $(this).hasClass("chosen");
                         $("#explorerTable tr").removeClass("chosen");
                         name = "";
@@ -208,9 +211,9 @@ function onFileUploadSuccess() {
     $("#uploadFileModal").modal("hide");
 };
 
-(function () {
+(function() {
 
-    $(document).ready(function () {
+    $(document).ready(function() {
         function orderBy(a, b, isNumb) {
             if (isNumb) return parseInt(a) - parseInt(b);
             if (a < b) return -1;
@@ -226,7 +229,7 @@ function onFileUploadSuccess() {
             var rows;
             if (!isDesc) {
                 rows = table.find("tbody > tr.folder").get();
-                rows.sort(function (rowA, rowB) {
+                rows.sort(function(rowA, rowB) {
                     var keyA;
                     var keyB;
                     if (isDate) {
@@ -239,12 +242,12 @@ function onFileUploadSuccess() {
                     return orderBy(keyA, keyB, isNum);
                 });
                 $.each(rows,
-                    function (index, row) {
+                    function(index, row) {
                         table.children("tbody").append(row);
                     });
 
                 rows = table.find("tbody > tr.file").get();
-                rows.sort(function (rowA, rowB) {
+                rows.sort(function(rowA, rowB) {
                     var keyA;
                     var keyB;
                     if (isDate) {
@@ -257,12 +260,12 @@ function onFileUploadSuccess() {
                     return orderBy(keyA, keyB, isNum);
                 });
                 $.each(rows,
-                    function (index, row) {
+                    function(index, row) {
                         table.children("tbody").append(row);
                     });
             } else {
                 rows = table.find("tbody > tr.file").get();
-                rows.sort(function (rowA, rowB) {
+                rows.sort(function(rowA, rowB) {
                     var keyA;
                     var keyB;
                     if (isDate) {
@@ -275,12 +278,12 @@ function onFileUploadSuccess() {
                     return orderBy(keyB, keyA, isNum);
                 });
                 $.each(rows,
-                    function (index, row) {
+                    function(index, row) {
                         table.children("tbody").append(row);
                     });
 
                 rows = table.find("tbody > tr.folder").get();
-                rows.sort(function (rowA, rowB) {
+                rows.sort(function(rowA, rowB) {
                     var keyA;
                     var keyB;
                     if (isDate) {
@@ -293,13 +296,13 @@ function onFileUploadSuccess() {
                     return orderBy(keyB, keyA, isNum);
                 });
                 $.each(rows,
-                    function (index, row) {
+                    function(index, row) {
                         table.children("tbody").append(row);
                     });
             }
         }
 
-        $("th").click(function () {
+        $("th").click(function() {
             var selectedHeader = $(this).closest("th");
             selectedHeader.toggleClass("desc");
             var isDesc = selectedHeader.hasClass("desc");
@@ -310,7 +313,7 @@ function onFileUploadSuccess() {
         var type = "";
 
         $("#deleteButton").prop("disabled", true);
-        $("#explorerTable tr").click(function () {
+        $("#explorerTable tr").click(function() {
             var selected = $(this).hasClass("chosen");
             $("#explorerTable tr").removeClass("chosen");
             name = "";
@@ -325,7 +328,7 @@ function onFileUploadSuccess() {
             }
         });
 
-        $("#deleteButton").click(function () {
+        $("#deleteButton").click(function() {
             var jsonObject = {
                 "name": name,
                 "type": type,
@@ -340,29 +343,30 @@ function onFileUploadSuccess() {
                     dataType: "html",
                     data: JSON.stringify(jsonObject),
                     contentType: "application/json; charset=UTF-8",
-                    success: function (data) {
+                    success: function(data) {
 
                         var target = $("#explorerTable");
                         target.empty();
                         target.append(data);
 
-                        $("tr.folder").each(function () {
+                        $("tr.folder").each(function() {
                             var folderName = $(this).children("td")[0].innerText.trim();
                             var dblStr = "location.href = '/Home/Explorer/" +
                                 $("#uriDrive").val() +
+                                "/" +
                                 $("#uriPath").val() +
                                 folderName +
                                 "/'";
                             $(this).attr("ondblclick", dblStr);
                         });
                     },
-                    failure: function (errMsg) {
+                    failure: function(errMsg) {
                         alert(errMsg);
                     }
-                }).done(function () {
+                }).done(function() {
 
                     $("#deleteButton").prop("disabled", true);
-                    $("#explorerTable tr").click(function () {
+                    $("#explorerTable tr").click(function() {
                         var selected = $(this).hasClass("chosen");
                         $("#explorerTable tr").removeClass("chosen");
                         name = "";
