@@ -1,14 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Web;
 using System.Web.Mvc;
-using System.Web.WebPages;
-using BLL.Interface.Entities;
 using BLL.Interface.Services;
-using Newtonsoft.Json.Linq;
 using PL.Infrastrucuture.Mappers;
 using PL.Models;
 
