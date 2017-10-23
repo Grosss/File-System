@@ -1,10 +1,12 @@
 ﻿using System.Linq;
 using System.Web.Mvc;
 using BLL.Interface.Services;
+using PL.Filters;
 using PL.Infrastrucuture.Mappers;
 
 namespace PL.Controllers
 {
+	[CustomErrorHandler]
 	[Authorize]
     public class ProfileController : Controller
     {

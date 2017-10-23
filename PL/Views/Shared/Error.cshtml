@@ -1,0 +1,21 @@
+﻿@model HandleErrorInfo
+@{
+    ViewBag.Title = ViewBag.StatusCode + "Error. Sorry, there was a problem.";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div>
+    <h2><strong>Ooops... The error was occured</strong></h2>
+    <br />
+    <div>
+        @Model.Exception.Message
+    </div>
+    <br />
+    <div>
+        @Html.ActionLink("Go Home", "Index", "Home")
+    </div>
+    <div style="display: none">
+        @Model.Exception.StackTrace
+    </div>
+</div>
+

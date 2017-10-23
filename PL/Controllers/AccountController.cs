@@ -1,11 +1,13 @@
 ﻿using System.Web.Mvc;
 using System.Web.Security;
 using BLL.Interface.Services;
+using PL.Filters;
 using PL.Models;
 using PL.Providers;
 
 namespace PL.Controllers
 {
+	[CustomErrorHandler]
     public class AccountController : Controller
 	{
 		private readonly IUserService userService;

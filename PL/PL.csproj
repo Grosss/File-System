@@ -185,6 +185,7 @@
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ProfileController.cs" />
+    <Compile Include="Filters\CustomErrorHandler.cs" />
     <Compile Include="Infrastrucuture\Mappers\DirectoryMapper.cs" />
     <Compile Include="Infrastrucuture\Mappers\FileMapper.cs" />
     <Compile Include="Infrastrucuture\Mappers\UserMapper.cs" />
@@ -320,10 +321,9 @@
     <Content Include="Views\Error\BadRequest.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Home\_GetFiles.cshtml" />
+    <Content Include="Views\Shared\Error.cshtml" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="ExplorerFolder\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="packages.config" />
   </ItemGroup>

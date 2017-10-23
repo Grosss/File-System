@@ -1,4 +1,5 @@
 ﻿using System.Web.Mvc;
+using PL.Filters;
 
 namespace PL
 {
@@ -7,6 +8,7 @@ namespace PL
 		public static void RegisterGlobalFilters(GlobalFilterCollection filters)
 		{
 			filters.Add(new HandleErrorAttribute());
+			filters.Add(new CustomErrorHandler());
 		}
 	}
 }

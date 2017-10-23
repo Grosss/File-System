@@ -4,15 +4,15 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using BLL.Interface.Services;
+using PL.Filters;
 using PL.Infrastrucuture.Mappers;
 using PL.Models;
 
 namespace PL.Controllers
 {
+	[CustomErrorHandler]
     public class HomeController : Controller
     {
-	    private const string RootDirectory = "~/ExplorerFolder/";
-
 		private readonly IFileService fileService;
 		private readonly IDirectoryService directoryService;
 
@@ -31,7 +31,7 @@ namespace PL.Controllers
 
 		    try
 		    {
-			    var files = fileService.GetFileInSubdirectories(realPath, searchResult);
+			    var files = fileService.GetFilesInSubdirectories(realPath, searchResult);
 				
 				return PartialView("_GetFiles", files.Select(f => f.ToMvcFile()));
 		    }
@@ -85,8 +85,7 @@ namespace PL.Controllers
 
 				return View(explorerModel);
 			}
-			return Content(path + " is not a valid file or directory. " + RouteData.Values["controller"] + " " + RouteData.Values["action"]
-				+ " " + RouteData.Values["driveName"] + " " + RouteData.Values["path"]);
+			return RedirectToAction("NotFound", "Error");
 		}
 		
 		[Authorize]
@@ -116,8 +115,7 @@ namespace PL.Controllers
 
 				return PartialView("_GetDirectories", explorerModel);
 			}
-			return Content(path + "ZZZ is not a valid file or directory. ZZZ " + RouteData.Values["controller"] + " " + RouteData.Values["action"]
-				+ " " + RouteData.Values["driveName"] + " " + RouteData.Values["path"]);
+			return RedirectToAction("NotFound", "Error");
 		}
 		
 	    [Authorize(Roles = "admin")]
@@ -207,7 +205,9 @@ namespace PL.Controllers
 			return PartialView("_GetDirectories", explorerModel);
 		}
 
-		private ExplorerModel GetExplorerModel(string realPath)
+	    #region private methods
+
+	    private ExplorerModel GetExplorerModel(string realPath)
 		{
 			var dirListModel = directoryService.GetAllDirectories(realPath).Select(d => d.ToMvcDirectory());
 			var fileListModel = fileService.GetAllFiles(realPath).Select(f => f.ToMvcFile());
@@ -219,5 +219,7 @@ namespace PL.Controllers
 			};
 			return explorerModel;
 		}
+
+	    #endregion
     }
 }
