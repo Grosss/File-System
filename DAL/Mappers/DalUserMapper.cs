@@ -7,7 +7,7 @@ namespace DAL.Mappers
 	{
 		public static DalUser ToDalUser(this User user)
 		{
-			var dalUser = new DalUser
+			DalUser dalUser = new DalUser
 			{
 				Id = user.UserId,
 				Email = user.Email,
@@ -20,7 +20,7 @@ namespace DAL.Mappers
 
 		public static User ToOrmUser(this DalUser user)
 		{
-			var ormUser = new User
+			User ormUser = new User
 			{
 				UserId = user.Id,
 				Email = user.Email,

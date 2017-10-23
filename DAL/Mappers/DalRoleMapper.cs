@@ -7,7 +7,7 @@ namespace DAL.Mappers
 	{
 		public static DalRole ToDalRole(this Role role)
 		{
-			var dalRole = new DalRole
+			DalRole dalRole = new DalRole
 			{
 				Id = role.RoleId,
 				Name = role.Name
@@ -18,7 +18,7 @@ namespace DAL.Mappers
 
 		public static Role ToOrmRole(this DalRole role)
 		{
-			var ormRole = new Role
+			Role ormRole = new Role
 			{
 				RoleId = role.Id,
 				Name = role.Name,

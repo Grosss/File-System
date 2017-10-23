@@ -10,7 +10,7 @@ namespace BLL.Mappers
 			if (user == null)
 				return null;
 
-			var bllUser = new UserEntity
+			UserEntity bllUser = new UserEntity
 			{
 				Id = user.Id,
 				Email = user.Email,
@@ -26,7 +26,7 @@ namespace BLL.Mappers
 			if (user == null)
 				return null;
 
-			var dalUser = new DalUser
+			DalUser dalUser = new DalUser
 			{
 				Id = user.Id,
 				Email = user.Email,

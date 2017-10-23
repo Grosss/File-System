@@ -10,7 +10,7 @@ namespace BLL.Mappers
 			if (role == null)
 				return null;
 
-			var bllRole = new RoleEntity
+			RoleEntity bllRole = new RoleEntity
 			{
 				Id = role.Id,
 				Name = role.Name,
@@ -24,7 +24,7 @@ namespace BLL.Mappers
 			if (role == null)
 				return null;
 
-			var dalRole = new DalRole
+			DalRole dalRole = new DalRole
 			{
 				Id = role.Id,
 				Name = role.Name
