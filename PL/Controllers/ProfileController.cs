@@ -52,13 +52,17 @@ namespace PL.Controllers
 				return RedirectToAction("BadRequest", "Error");
 			}
 
+			var role = roleService.GetAllRoles().FirstOrDefault(r => r.Name == roleName);
+			if (role == null)
+				return RedirectToAction("BadRequest", "Error");
+
 			if (user.Roles.Contains(roleName))
 			{
-				roleService.RemoveRoleFromUser(userId, roleService.GetAllRoles().FirstOrDefault(r => r.Name == roleName).Id);
+				roleService.RemoveRoleFromUser(userId, role.Id);
 			}
 			else
 			{
-				roleService.AddRoleToUser(userId, roleService.GetAllRoles().FirstOrDefault(r => r.Name == roleName).Id);
+				roleService.AddRoleToUser(userId, role.Id);
 			}
 
 		    return PartialView("_UpdateUserRole", user);
