@@ -59,7 +59,8 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="UnitTests.cs" />
+    <Compile Include="UserServiceTests.cs" />
+    <Compile Include="DirectoryServiceTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -73,6 +74,10 @@
     <ProjectReference Include="..\BLL\BLL.csproj">
       <Project>{61DA7794-7455-4DE2-B447-AB2F218FC517}</Project>
       <Name>BLL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DAL.Interface\DAL.Interface.csproj">
+      <Project>{25A5B80A-A04A-4B16-BEF8-9A0B14164291}</Project>
+      <Name>DAL.Interface</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>
