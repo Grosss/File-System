@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace DAL.Interface
+﻿namespace DAL.Interface
 {
 	public interface IUnitOfWork
 	{
